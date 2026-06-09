@@ -31,18 +31,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
-import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,26 +128,17 @@ fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Quiz(quizType: String, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    var quiz by remember { mutableStateOf(listOf(
-        HamQuestion(
-            id = "BOB",
-            correct = 0,
-            refs = "no_refs",
-            question = "Does this take a while to load?",
-            answers = listOf("No", "Absolutely not", "Yes", "Of course"),
-            figure = "",
-            correct_letter = "A"
-        )
-    )) }
+fun Quiz(
+    quizType: String,
+    modifier: Modifier = Modifier,
+    viewModel: HamTestViewModel = viewModel()
+) {
 
     LaunchedEffect(quizType) {
-        val quizRaw = context.assets.open("$quizType.json").bufferedReader().use { it.readText() }
-        quiz = Json.decodeFromString<List<HamQuestion>>(quizRaw)
+        viewModel.loadQuiz(quizType)
     }
 
-    var currentQuestion by remember { mutableIntStateOf(0) }
+    val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
     var checked by remember { mutableStateOf(false) }
 
     var selectedAnswer by remember { mutableIntStateOf(0) }
@@ -161,7 +152,7 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
         Text(
-            text = quiz[currentQuestion].question,
+            text = currentQuestion.question,
             style = MaterialTheme.typography.headlineSmall
         )
         Column(
@@ -169,7 +160,7 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
             modifier = Modifier.selectableGroup()
         ) {
             val letters = listOf("A", "B" , "C", "D")
-            quiz[currentQuestion].answers.forEachIndexed { index, answer ->
+            currentQuestion.answers.forEachIndexed { index, answer ->
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -228,11 +219,11 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
 
         Button({
             if (!checked) {
-                revealedIsCheckedCorrect = selectedAnswer == quiz[currentQuestion].correct
-                revealedCorrectLetter = quiz[currentQuestion].correct_letter
+                revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
+                revealedCorrectLetter = currentQuestion.correct_letter
                 checked = true
             } else {
-                currentQuestion++
+                viewModel.nextQuestion()
                 checked = false
                 selectedAnswer = 0
             }
