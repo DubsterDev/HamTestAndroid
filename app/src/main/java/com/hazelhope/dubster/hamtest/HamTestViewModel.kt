@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.random.Random
 
 class HamTestViewModel(application: Application) : AndroidViewModel(application) {
     private val _db = Room.databaseBuilder(
@@ -101,18 +102,33 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
 
-            var allHamQuestions = allQuestions.map { questionInfo ->
+            var allHamQuestions = allQuestions.mapNotNull { questionInfo ->
                 _quiz.value.find { it.id == questionInfo.id }
-            }.filterNotNull()
+            }
 
             if (allHamQuestions.isEmpty()) {
                 allHamQuestions = listOf(_placeholderQuestion)
             }
 
+            val shouldUseRandomQuestion = Random.nextDouble()
+
+            var randomQuestion = allHamQuestions[0]
+
+            if (shouldUseRandomQuestion >= .6) {
+                val onlyCorrectQuestions = allQuestions.filter { it.score >= 0 }
+                val onlyCorrectHamQuestions = onlyCorrectQuestions.mapNotNull { questionInfo ->
+                    _quiz.value.find { it.id == questionInfo.id }
+                }
+
+                randomQuestion = if (onlyCorrectHamQuestions.isNotEmpty()) {
+                    onlyCorrectHamQuestions.random()
+                } else {
+                    allHamQuestions.random()
+                }
+            }
+
             _currentQuestion.update {
-
-                shuffleHamQuestion(allHamQuestions[0])
-
+                shuffleHamQuestion(randomQuestion)
             }
             _currentQuestionNumber.update { currentNumber ->
                 currentNumber + 1
