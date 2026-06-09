@@ -152,18 +152,14 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
 
     var selectedAnswer by remember { mutableIntStateOf(0) }
 
-    var isCheckedCorrect by remember { mutableStateOf(false) }
     var revealedIsCheckedCorrect by remember { mutableStateOf(false) }
     var revealedCorrectLetter by remember { mutableStateOf("") }
 
     LaunchedEffect(checked) {
-        revealedIsCheckedCorrect = isCheckedCorrect
+        revealedIsCheckedCorrect = selectedAnswer == quiz[currentQuestion].correct
         revealedCorrectLetter = quiz[currentQuestion].correct_letter
     }
 
-    LaunchedEffect(selectedAnswer) {
-        isCheckedCorrect = selectedAnswer == quiz[currentQuestion].correct
-    }
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
