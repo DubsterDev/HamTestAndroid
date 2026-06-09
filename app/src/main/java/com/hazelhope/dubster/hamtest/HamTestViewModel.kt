@@ -38,44 +38,44 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     ))
     val quiz: StateFlow<List<HamQuestion>> = _quiz.asStateFlow()
 
-    private val _currentQuestionNumber = MutableStateFlow(0)
-
     private val _currentQuestion = MutableStateFlow(_placeholderQuestion)
     val currentQuestion: StateFlow<HamQuestion> = _currentQuestion.asStateFlow()
 
     fun loadQuiz(quizType: String) {
-        this.quizType = quizType
-        _currentQuestionNumber.update {
-            0
+        if (this.quizType != quizType) {
+            this.quizType = quizType
+            _quiz.update {
+                val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
+                Json.decodeFromString<List<HamQuestion>>(rawQuiz)
+            }
+            nextQuestion(false, _specialFirstQuestion = true)
         }
-       _quiz.update {
-           val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
-           Json.decodeFromString<List<HamQuestion>>(rawQuiz)
-       }
     }
 
-    fun nextQuestion(wasQuestionWrong: Boolean) {
+    fun nextQuestion(wasQuestionWrong: Boolean, _specialFirstQuestion: Boolean = false) {
         CoroutineScope(Dispatchers.IO).launch {
             val dao = _db.userQuestionDao()
 
-            val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
-            var score = -2
-            var didExist = false
-            if (!oldUserQuestion.isEmpty()) {
-                score = oldUserQuestion[0].score
-                didExist = true
-            }
-            if (wasQuestionWrong) score--
-            else score++
+            if (!_specialFirstQuestion) {
+                val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
+                var score = -2
+                var didExist = false
+                if (!oldUserQuestion.isEmpty()) {
+                    score = oldUserQuestion[0].score
+                    didExist = true
+                }
+                if (wasQuestionWrong) score--
+                else score++
 
-            if (didExist) {
-                dao.updateScore(_currentQuestion.value.id, score)
-            } else {
-                dao.insertAll(UserQuestionInfo(
-                    id = _currentQuestion.value.id,
-                    pool = quizType,
-                    score = score
-                ))
+                if (didExist) {
+                    dao.updateScore(_currentQuestion.value.id, score)
+                } else {
+                    dao.insertAll(UserQuestionInfo(
+                        id = _currentQuestion.value.id,
+                        pool = quizType,
+                        score = score
+                    ))
+                }
             }
 
             var allQuestions = dao.getAll(quizType)
@@ -129,9 +129,6 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
             _currentQuestion.update {
                 shuffleHamQuestion(randomQuestion)
-            }
-            _currentQuestionNumber.update { currentNumber ->
-                currentNumber + 1
             }
         }
     }
