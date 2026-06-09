@@ -177,7 +177,8 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
                         .selectable(
                             selected = (index == selectedAnswer),
                             onClick = { selectedAnswer = index },
-                            role = Role.RadioButton
+                            role = Role.RadioButton,
+                            enabled = !checked
                         )
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
