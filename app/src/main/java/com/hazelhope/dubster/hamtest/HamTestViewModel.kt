@@ -43,11 +43,24 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     fun nextQuestion() {
         Log.d("TAG", "nextQuestion: ${_currentQuestionNumber.value}")
         _currentQuestion.update {
-            _quiz.value[_currentQuestionNumber.value]
+            shuffleHamQuestion(_quiz.value[_currentQuestionNumber.value])
+
         }
         _currentQuestionNumber.update { currentNumber ->
             currentNumber + 1
         }
+    }
+
+    fun shuffleHamQuestion(hamQuestion: HamQuestion): HamQuestion {
+        val correctAnswer = hamQuestion.answers[hamQuestion.correct]
+        val shuffledAnswers = hamQuestion.answers.shuffled()
+        val newCorrectAnswer = shuffledAnswers.indexOf(correctAnswer)
+        val newCorrectAnswerLetter = listOf("A", "B", "C", "D")[newCorrectAnswer]
+        return hamQuestion.copy(
+            answers = shuffledAnswers,
+            correct = newCorrectAnswer,
+            correct_letter = newCorrectAnswerLetter
+        )
     }
 
 }
