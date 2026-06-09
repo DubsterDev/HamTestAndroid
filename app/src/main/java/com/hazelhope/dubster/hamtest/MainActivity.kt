@@ -110,10 +110,15 @@ fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun Quiz(quizType: String, modifier: Modifier = Modifier) {
-    Text(
-        text = quizType,
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-    )
+    ) {
+        Text(
+            text = "This is a question, you should pick an option."
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -124,7 +129,7 @@ fun AppPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 400, heightDp = 600)
 @Composable
 fun GeneralQuizPreview() {
     HamTestTheme {
