@@ -86,16 +86,19 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 val filteredQuestions = _quiz.value.filter {
                     !allQuestionIds.contains(it.id)
                 }
-                val newQuestion = filteredQuestions.random()
-                val newQuestionInfo = UserQuestionInfo(
-                    id = newQuestion.id,
-                    pool = quizType,
-                    score = -2
-                )
 
-                dao.insertAll(newQuestionInfo)
+                if (!filteredQuestions.isEmpty()) {
+                    val newQuestion = filteredQuestions.random()
+                    val newQuestionInfo = UserQuestionInfo(
+                        id = newQuestion.id,
+                        pool = quizType,
+                        score = -2
+                    )
 
-                allQuestions = listOf(newQuestionInfo) + allQuestions
+                    dao.insertAll(newQuestionInfo)
+
+                    allQuestions = listOf(newQuestionInfo) + allQuestions
+                }
             }
 
             var allHamQuestions = allQuestions.map { questionInfo ->
@@ -107,6 +110,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             }
 
             _currentQuestion.update {
+
                 shuffleHamQuestion(allHamQuestions[0])
 
             }
