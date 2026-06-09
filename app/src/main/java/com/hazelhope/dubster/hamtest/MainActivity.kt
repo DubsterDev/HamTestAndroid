@@ -123,3 +123,11 @@ fun AppPreview() {
         App()
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun GeneralQuizPreview() {
+    HamTestTheme {
+        Quiz("general")
+    }
+}
