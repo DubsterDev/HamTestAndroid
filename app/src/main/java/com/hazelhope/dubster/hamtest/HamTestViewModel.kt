@@ -33,10 +33,9 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
     private var quizType: String = "unknown"
 
-    private val _quiz = MutableStateFlow(listOf(
+    private var _quiz = listOf(
         _placeholderQuestion
-    ))
-    val quiz: StateFlow<List<HamQuestion>> = _quiz.asStateFlow()
+    )
 
     private val _currentQuestion = MutableStateFlow(_placeholderQuestion)
     val currentQuestion: StateFlow<HamQuestion> = _currentQuestion.asStateFlow()
@@ -44,10 +43,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     fun loadQuiz(quizType: String) {
         if (this.quizType != quizType) {
             this.quizType = quizType
-            _quiz.update {
-                val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
-                Json.decodeFromString<List<HamQuestion>>(rawQuiz)
-            }
+            val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
+            _quiz = Json.decodeFromString<List<HamQuestion>>(rawQuiz)
             nextQuestion(false, _specialFirstQuestion = true)
         }
     }
@@ -84,7 +81,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
             if (scoresLessThanZero.isEmpty()) {
                 val allQuestionIds = allQuestions.map { it.id }
-                val filteredQuestions = _quiz.value.filter {
+                val filteredQuestions = _quiz.filter {
                     !allQuestionIds.contains(it.id)
                 }
 
@@ -103,7 +100,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             }
 
             var allHamQuestions = allQuestions.mapNotNull { questionInfo ->
-                _quiz.value.find { it.id == questionInfo.id }
+                _quiz.find { it.id == questionInfo.id }
             }
 
             if (allHamQuestions.isEmpty()) {
@@ -117,7 +114,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             if (shouldUseRandomQuestion >= .6) {
                 val onlyCorrectQuestions = allQuestions.filter { it.score >= 0 }
                 val onlyCorrectHamQuestions = onlyCorrectQuestions.mapNotNull { questionInfo ->
-                    _quiz.value.find { it.id == questionInfo.id }
+                    _quiz.find { it.id == questionInfo.id }
                 }
 
                 randomQuestion = if (onlyCorrectHamQuestions.isNotEmpty()) {
