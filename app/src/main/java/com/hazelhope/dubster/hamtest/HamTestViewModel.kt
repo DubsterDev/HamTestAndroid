@@ -45,15 +45,15 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             this.quizType = quizType
             val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
             _quiz = Json.decodeFromString<List<HamQuestion>>(rawQuiz)
-            nextQuestion(false, _specialFirstQuestion = true)
+            nextQuestion(false, specialFirstQuestion = true)
         }
     }
 
-    fun nextQuestion(wasQuestionWrong: Boolean, _specialFirstQuestion: Boolean = false) {
+    fun nextQuestion(wasQuestionWrong: Boolean, specialFirstQuestion: Boolean = false) {
         CoroutineScope(Dispatchers.IO).launch {
             val dao = _db.userQuestionDao()
 
-            if (!_specialFirstQuestion) {
+            if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
                 var score = -2
                 var didExist = false
