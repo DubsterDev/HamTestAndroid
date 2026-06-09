@@ -236,7 +236,7 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
                 }
             }
             Button({
-
+                currentQuestion++
             },
                 modifier = Modifier.fillMaxWidth()
             ) {
