@@ -6,24 +6,39 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
+import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,14 +125,67 @@ fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun Quiz(quizType: String, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    var quiz by remember { mutableStateOf(listOf(
+        HamQuestion(
+            id = "BOB",
+            correct = 0,
+            refs = "no_refs",
+            question = "Does this take a while to load?",
+            answers = listOf("No", "Absolutely not", "Yes", "Of course"),
+            figure = "",
+            correct_letter = "A"
+        )
+    )) }
+    var selectedAnswer by remember { mutableIntStateOf(0) }
+    LaunchedEffect(quizType) {
+        val quizRaw = context.assets.open("$quizType.json").bufferedReader().use { it.readText() }
+        quiz = Json.decodeFromString<List<HamQuestion>>(quizRaw)
+    }
     Column(
-        verticalArrangement = Arrangement.Bottom,
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
         Text(
-            text = "This is a question, you should pick an option."
+            text = quiz[0].question,
+            style = MaterialTheme.typography.headlineSmall
         )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.selectableGroup()
+        ) {
+            quiz[0].answers.forEachIndexed { index, answer ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .selectable(
+                            selected = (index == selectedAnswer),
+                            onClick = { selectedAnswer = index },
+                            role = Role.RadioButton
+                        )
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = (index == selectedAnswer),
+                        onClick = null
+                    )
+                    Text(
+                        text = answer,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                }
+            }
+        }
+        Button({},
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Continue"
+            )
+        }
     }
 }
 
