@@ -15,13 +15,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +40,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(modifier: Modifier = Modifier) {
-    var view by remember { mutableStateOf("home") }
+    val navController = rememberNavController()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -53,12 +54,19 @@ fun App(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
         val newModifier = Modifier.padding(innerPadding)
-        if (view == "home") {
-            Home(goToQuiz = {
-                view = it
-            }, modifier = newModifier)
-        } else {
-            Quiz(view, modifier = newModifier)
+        NavHost(
+            navController = navController,
+            startDestination = "home"
+        ) {
+            composable("home") {
+                Home(goToQuiz = {
+                    navController.navigate("quiz/$it")
+                }, modifier = newModifier)
+            }
+            composable("quiz/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
+                val quizType = it.arguments?.getString("class") ?: "unknown"
+                Quiz(quizType, modifier = newModifier)
+            }
         }
     }
 }
