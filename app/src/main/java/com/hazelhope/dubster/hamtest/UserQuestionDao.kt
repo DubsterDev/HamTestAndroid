@@ -7,8 +7,11 @@ import androidx.room.Query
 
 @Dao
 interface UserQuestionDao {
-    @Query("SELECT * FROM question_info")
+    @Query("SELECT * FROM question_info ORDER BY score ASC")
     fun getAll(): List<UserQuestionInfo>
+
+    @Query("SELECT * FROM question_info WHERE score < 0")
+    fun getAmountOfScoresLessThanZero(): List<UserQuestionInfo>
 
     @Query("SELECT * FROM question_info WHERE id IN (:ids)")
     fun loadAllByIds(ids: List<String>): List<UserQuestionInfo>

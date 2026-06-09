@@ -1,7 +1,6 @@
 package com.hazelhope.dubster.hamtest
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.room.Room
@@ -56,7 +55,9 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
     fun nextQuestion(wasQuestionWrong: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
-            val oldUserQuestion = _db.userQuestionDao().loadAllByIds(listOf(_currentQuestion.value.id))
+            val dao = _db.userQuestionDao()
+
+            val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
             var score = -2
             var didExist = false
             if (!oldUserQuestion.isEmpty()) {
@@ -66,19 +67,47 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             if (wasQuestionWrong) score--
             else score++
 
-            Log.d("nextQuestion", "score: $score")
-
             if (didExist) {
-                _db.userQuestionDao().updateScore(_currentQuestion.value.id, score)
+                dao.updateScore(_currentQuestion.value.id, score)
             } else {
-                _db.userQuestionDao().insertAll(UserQuestionInfo(
+                dao.insertAll(UserQuestionInfo(
                     id = _currentQuestion.value.id,
                     pool = quizType,
                     score = score
                 ))
             }
+
+            var allQuestions = dao.getAll()
+
+            val scoresLessThanZero = dao.getAmountOfScoresLessThanZero()
+
+            if (scoresLessThanZero.isEmpty()) {
+                val allQuestionIds = allQuestions.map { it.id }
+                val filteredQuestions = _quiz.value.filter {
+                    !allQuestionIds.contains(it.id)
+                }
+                val newQuestion = filteredQuestions.random()
+                val newQuestionInfo = UserQuestionInfo(
+                    id = newQuestion.id,
+                    pool = quizType,
+                    score = -2
+                )
+
+                dao.insertAll(newQuestionInfo)
+
+                allQuestions = listOf(newQuestionInfo) + allQuestions
+            }
+
+            var allHamQuestions = allQuestions.map { questionInfo ->
+                _quiz.value.find { it.id == questionInfo.id }
+            }.filterNotNull()
+
+            if (allHamQuestions.isEmpty()) {
+                allHamQuestions = listOf(_placeholderQuestion)
+            }
+
             _currentQuestion.update {
-                shuffleHamQuestion(_quiz.value[_currentQuestionNumber.value])
+                shuffleHamQuestion(allHamQuestions[0])
 
             }
             _currentQuestionNumber.update { currentNumber ->
