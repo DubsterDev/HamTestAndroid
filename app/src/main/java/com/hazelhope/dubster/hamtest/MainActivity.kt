@@ -223,7 +223,7 @@ fun Quiz(
                 revealedCorrectLetter = currentQuestion.correct_letter
                 checked = true
             } else {
-                viewModel.nextQuestion()
+                viewModel.nextQuestion(!revealedIsCheckedCorrect)
                 checked = false
                 selectedAnswer = 0
             }
