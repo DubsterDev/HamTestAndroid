@@ -78,9 +78,9 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 ))
             }
 
-            var allQuestions = dao.getAll()
+            var allQuestions = dao.getAll(quizType)
 
-            val scoresLessThanZero = dao.getAmountOfScoresLessThanZero()
+            val scoresLessThanZero = dao.getAmountOfScoresLessThanZero(quizType)
 
             if (scoresLessThanZero.isEmpty()) {
                 val allQuestionIds = allQuestions.map { it.id }
