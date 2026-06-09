@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -152,6 +153,13 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
     var selectedAnswer by remember { mutableIntStateOf(0) }
 
     var isCheckedCorrect by remember { mutableStateOf(false) }
+    var revealedIsCheckedCorrect by remember { mutableStateOf(false) }
+    var revealedCorrectLetter by remember { mutableStateOf("") }
+
+    LaunchedEffect(checked) {
+        revealedIsCheckedCorrect = isCheckedCorrect
+        revealedCorrectLetter = quiz[currentQuestion].correct_letter
+    }
 
     LaunchedEffect(selectedAnswer) {
         isCheckedCorrect = selectedAnswer == quiz[currentQuestion].correct
@@ -195,17 +203,7 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
                 }
             }
         }
-        if (!checked) {
-            Button({
-                checked = true
-            },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Submit"
-                )
-            }
-        } else {
+        AnimatedVisibility(checked) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -216,7 +214,7 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
                         .padding(12.dp)
                 ) {
                     Image(
-                        if (isCheckedCorrect) painterResource(R.drawable.outline_check_circle)
+                        if (revealedIsCheckedCorrect) painterResource(R.drawable.outline_check_circle)
                         else painterResource(R.drawable.outline_cancel),
                         contentDescription = null
                     )
@@ -225,25 +223,31 @@ fun Quiz(quizType: String, modifier: Modifier = Modifier) {
                             .padding(start = 12.dp)
                     ) {
                         Text(
-                            text = if (isCheckedCorrect) "Correct!" else "Wrong.",
+                            text = if (revealedIsCheckedCorrect) "Correct!" else "Wrong.",
                             style = MaterialTheme.typography.titleLarge
                         )
                         Text(
-                            text = if (isCheckedCorrect) "That was the right answer."
-                            else "The right answer was ${quiz[currentQuestion].correct_letter}"
+                            text = if (revealedIsCheckedCorrect) "That was the right answer."
+                            else "The right answer was $revealedCorrectLetter"
                         )
                     }
                 }
             }
-            Button({
+        }
+
+        Button({
+            if (!checked) checked = true
+            else {
                 currentQuestion++
-            },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Next Question"
-                )
+                checked = false
+                selectedAnswer = 0
             }
+        },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = if (checked) "Next Question" else "Submit"
+            )
         }
     }
 }
