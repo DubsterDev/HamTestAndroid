@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -165,8 +166,9 @@ fun Quiz(
                 .padding(12.dp)
         ) {
             Text(
-                text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}; " +
-                        "Weak Questions: ${questionPoolData.weakQuestions}",
+                text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}\n" +
+                        "Weak Questions: ${questionPoolData.weakQuestions}\n" +
+                        "Current Question Score: ${questionPoolData.currentQuestionScore}",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

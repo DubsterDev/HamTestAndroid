@@ -43,7 +43,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     private val _questionPoolData = MutableStateFlow(QuestionPoolLiveData(
         totalPoolSize = 1,
         inUsePoolSize = 1,
-        weakQuestions = 1
+        weakQuestions = 1,
+        currentQuestionScore = 0
     ))
     val questionPoolData: StateFlow<QuestionPoolLiveData> = _questionPoolData.asStateFlow()
 
@@ -57,7 +58,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 QuestionPoolLiveData(
                     totalPoolSize = _quiz.size,
                     inUsePoolSize = 0,
-                    weakQuestions = 0
+                    weakQuestions = 0,
+                    currentQuestionScore = 0
                 )
             }
             nextQuestion(false, specialFirstQuestion = true)
@@ -115,15 +117,10 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
 
-            _questionPoolData.update { oldData ->
-                oldData.copy(
-                    inUsePoolSize = allQuestions.size,
-                    weakQuestions = scoresLessThanZero.size
-                )
-            }
-
             var allHamQuestions = allQuestions.mapNotNull { questionInfo ->
-                _quiz.find { it.id == questionInfo.id }
+                _quiz.find { it.id == questionInfo.id }?.copy(
+                    userQuestionInfo = questionInfo
+                )
             }
 
             if (allHamQuestions.isEmpty()) {
@@ -135,9 +132,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             var randomQuestion = allHamQuestions[0]
 
             if (shouldUseRandomQuestion >= .6) {
-                val onlyCorrectQuestions = allQuestions.filter { it.score >= 0 }
-                val onlyCorrectHamQuestions = onlyCorrectQuestions.mapNotNull { questionInfo ->
-                    _quiz.find { it.id == questionInfo.id }
+                val onlyCorrectHamQuestions = allHamQuestions.filter {
+                    (it.userQuestionInfo?.score ?: -10) >= 0
                 }
 
                 randomQuestion = if (onlyCorrectHamQuestions.isNotEmpty()) {
@@ -145,6 +141,14 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 } else {
                     allHamQuestions.random()
                 }
+            }
+
+            _questionPoolData.update { oldData ->
+                oldData.copy(
+                    inUsePoolSize = allQuestions.size,
+                    weakQuestions = scoresLessThanZero.size,
+                    currentQuestionScore = randomQuestion.userQuestionInfo?.score ?: -2
+                )
             }
 
             _currentQuestion.update {

@@ -13,16 +13,19 @@ data class HamQuestion(
     val answers: List<String>,
     val figure: String,
     val correct_letter: String,
+    val userQuestionInfo: UserQuestionInfo? = null
 )
 
 @Serializable
 data class QuestionPoolLiveData(
     val totalPoolSize: Int,
     val inUsePoolSize: Int,
-    val weakQuestions: Int
+    val weakQuestions: Int,
+    val currentQuestionScore: Int
 )
 
 @Entity(tableName = "question_info")
+@Serializable
 data class UserQuestionInfo(
     @PrimaryKey val id: String,
     val pool: String,
