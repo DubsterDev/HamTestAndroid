@@ -20,6 +20,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -33,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -44,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
@@ -66,12 +68,45 @@ fun App(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     Scaffold(
         topBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+
+            val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
+
+            val topLevel = listOf("home")
+
+            val normalTitles = mapOf(
+                "home" to "Ham Test"
+            )
+            val classTitles = mapOf(
+                "technician" to "Technician Quiz",
+                "general" to "General Quiz",
+                "extra" to "Extra Quiz"
+            )
+
+            val title = if (currentRoute.startsWith("quiz/"))
+                classTitles[hamClass] ?: hamClass
+            else normalTitles[currentRoute] ?: currentRoute
+
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Ham Test"
+                        text = title
                     )
                 },
+                navigationIcon = {
+                    if (
+                        navController.previousBackStackEntry != null
+                        && !topLevel.contains(currentRoute)
+                        ) {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                painterResource(R.drawable.outline_arrow_back),
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
+                }
             )
         },
         modifier = modifier.fillMaxSize()
@@ -137,8 +172,6 @@ fun Quiz(
     modifier: Modifier = Modifier,
     viewModel: HamTestViewModel = viewModel()
 ) {
-    val context = LocalContext.current
-
     LaunchedEffect(quizType) {
         viewModel.loadQuiz(quizType)
     }
