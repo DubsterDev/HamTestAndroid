@@ -183,6 +183,12 @@ fun Quiz(
                 )
             }
             Text(
+                text = currentQuestion.id,
+                textAlign = TextAlign.Left,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
                 text = currentQuestion.question,
                 style = MaterialTheme.typography.headlineSmall
             )
