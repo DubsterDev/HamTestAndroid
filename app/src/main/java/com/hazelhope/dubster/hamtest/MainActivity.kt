@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -133,6 +134,7 @@ fun Quiz(
     modifier: Modifier = Modifier,
     viewModel: HamTestViewModel = viewModel()
 ) {
+    val context = LocalContext.current
 
     LaunchedEffect(quizType) {
         viewModel.loadQuiz(quizType)
@@ -169,6 +171,13 @@ fun Quiz(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier.fillMaxSize()
         ) {
+            if (currentQuestion.figure != "") {
+                Image(
+                    painterResource(figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
             Text(
                 text = currentQuestion.question,
                 style = MaterialTheme.typography.headlineSmall
@@ -271,3 +280,20 @@ fun GeneralQuizPreview() {
         Quiz("general")
     }
 }
+
+val figurePathsToIds = mapOf(
+    "e5-1.png" to R.drawable.e5_1,
+    "e6-1.png" to R.drawable.e6_1,
+    "e6-2.png" to R.drawable.e6_2,
+    "e6-3.png" to R.drawable.e6_3,
+    "e7-1.png" to R.drawable.e7_1,
+    "e7-2.png" to R.drawable.e7_2,
+    "e7-3.png" to R.drawable.e7_3,
+    "e9-1.png" to R.drawable.e9_1,
+    "e9-2.png" to R.drawable.e9_2,
+    "e9-3.png" to R.drawable.e9_3,
+    "g7-1.png" to R.drawable.g7_1,
+    "t-1.png" to R.drawable.t_1,
+    "t-2.png" to R.drawable.t_2,
+    "t-3.png" to R.drawable.t_3,
+)
