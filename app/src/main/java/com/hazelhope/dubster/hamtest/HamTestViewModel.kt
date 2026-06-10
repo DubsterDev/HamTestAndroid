@@ -40,11 +40,26 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     private val _currentQuestion = MutableStateFlow(_placeholderQuestion)
     val currentQuestion: StateFlow<HamQuestion> = _currentQuestion.asStateFlow()
 
+    private val _questionPoolData = MutableStateFlow(QuestionPoolLiveData(
+        totalPoolSize = 1,
+        inUsePoolSize = 1,
+        weakQuestions = 1
+    ))
+    val questionPoolData: StateFlow<QuestionPoolLiveData> = _questionPoolData.asStateFlow()
+
     fun loadQuiz(quizType: String) {
         if (this.quizType != quizType) {
             this.quizType = quizType
             val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
             _quiz = Json.decodeFromString<List<HamQuestion>>(rawQuiz)
+
+            _questionPoolData.update {
+                QuestionPoolLiveData(
+                    totalPoolSize = _quiz.size,
+                    inUsePoolSize = 0,
+                    weakQuestions = 0
+                )
+            }
             nextQuestion(false, specialFirstQuestion = true)
         }
     }
@@ -77,7 +92,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
             var allQuestions = dao.getAll(quizType)
 
-            val scoresLessThanZero = dao.getAmountOfScoresLessThanZero(quizType)
+            var scoresLessThanZero = dao.getAmountOfScoresLessThanZero(quizType)
 
             if (scoresLessThanZero.isEmpty()) {
                 val allQuestionIds = allQuestions.map { it.id }
@@ -96,7 +111,15 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                     dao.insertAll(newQuestionInfo)
 
                     allQuestions = listOf(newQuestionInfo) + allQuestions
+                    scoresLessThanZero = listOf(newQuestionInfo) + scoresLessThanZero
                 }
+            }
+
+            _questionPoolData.update { oldData ->
+                oldData.copy(
+                    inUsePoolSize = allQuestions.size,
+                    weakQuestions = scoresLessThanZero.size
+                )
             }
 
             var allHamQuestions = allQuestions.mapNotNull { questionInfo ->

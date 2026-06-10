@@ -138,6 +138,8 @@ fun Quiz(
         viewModel.loadQuiz(quizType)
     }
 
+    val questionPoolData by viewModel.questionPoolData.collectAsStateWithLifecycle()
+
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
     var checked by remember { mutableStateOf(false) }
 
@@ -147,92 +149,109 @@ fun Quiz(
     var revealedCorrectLetter by remember { mutableStateOf("") }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
-        Text(
-            text = currentQuestion.question,
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.selectableGroup()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
         ) {
-            val letters = listOf("A", "B" , "C", "D")
-            currentQuestion.answers.forEachIndexed { index, answer ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .selectable(
-                            selected = (index == selectedAnswer),
-                            onClick = { selectedAnswer = index },
-                            role = Role.RadioButton,
-                            enabled = !checked
-                        )
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = (index == selectedAnswer),
-                        onClick = null
-                    )
-                    Text(
-                        text = "${letters[index]}. $answer",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-                }
-            }
+            Text(
+                text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}; " +
+                        "Weak Questions: ${questionPoolData.weakQuestions}",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
-        AnimatedVisibility(checked) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxSize()
+        ) {
+            Text(
+                text = currentQuestion.question,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.selectableGroup()
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                ) {
-                    Image(
-                        if (revealedIsCheckedCorrect) painterResource(R.drawable.outline_check_circle)
-                        else painterResource(R.drawable.outline_cancel),
-                        contentDescription = null
-                    )
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 12.dp)
+                val letters = listOf("A", "B" , "C", "D")
+                currentQuestion.answers.forEachIndexed { index, answer ->
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = (index == selectedAnswer),
+                                onClick = { selectedAnswer = index },
+                                role = Role.RadioButton,
+                                enabled = !checked
+                            )
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = if (revealedIsCheckedCorrect) "Correct!" else "Wrong.",
-                            style = MaterialTheme.typography.titleLarge
+                        RadioButton(
+                            selected = (index == selectedAnswer),
+                            onClick = null
                         )
                         Text(
-                            text = if (revealedIsCheckedCorrect) "That was the right answer."
-                            else "The right answer was $revealedCorrectLetter"
+                            text = "${letters[index]}. $answer",
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 16.dp)
                         )
                     }
                 }
             }
-        }
-
-        Button({
-            if (!checked) {
-                revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
-                revealedCorrectLetter = currentQuestion.correct_letter
-                checked = true
-            } else {
-                viewModel.nextQuestion(!revealedIsCheckedCorrect)
-                checked = false
-                selectedAnswer = 0
+            AnimatedVisibility(checked) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                    ) {
+                        Image(
+                            if (revealedIsCheckedCorrect) painterResource(R.drawable.outline_check_circle)
+                            else painterResource(R.drawable.outline_cancel),
+                            contentDescription = null
+                        )
+                        Column(
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                        ) {
+                            Text(
+                                text = if (revealedIsCheckedCorrect) "Correct!" else "Wrong.",
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = if (revealedIsCheckedCorrect) "That was the right answer."
+                                else "The right answer was $revealedCorrectLetter"
+                            )
+                        }
+                    }
+                }
             }
-        },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = if (checked) "Next Question" else "Submit"
-            )
+
+            Button({
+                if (!checked) {
+                    revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
+                    revealedCorrectLetter = currentQuestion.correct_letter
+                    checked = true
+                } else {
+                    viewModel.nextQuestion(!revealedIsCheckedCorrect)
+                    checked = false
+                    selectedAnswer = 0
+                }
+            },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = if (checked) "Next Question" else "Submit"
+                )
+            }
         }
     }
 }

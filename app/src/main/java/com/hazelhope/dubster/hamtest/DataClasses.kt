@@ -15,6 +15,13 @@ data class HamQuestion(
     val correct_letter: String,
 )
 
+@Serializable
+data class QuestionPoolLiveData(
+    val totalPoolSize: Int,
+    val inUsePoolSize: Int,
+    val weakQuestions: Int
+)
+
 @Entity(tableName = "question_info")
 data class UserQuestionInfo(
     @PrimaryKey val id: String,
