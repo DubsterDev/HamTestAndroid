@@ -146,6 +146,37 @@ fun Quiz(
     val questionPoolData by viewModel.questionPoolData.collectAsStateWithLifecycle()
 
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
+
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize().padding(12.dp)
+    ) {
+        QuestionPoolDiagnostics(questionPoolData)
+        QuestionPoolQuestion(currentQuestion, {
+            viewModel.nextQuestion(it)
+        })
+    }
+}
+
+@Composable
+fun QuestionPoolDiagnostics(questionPoolData: QuestionPoolLiveData, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+    ) {
+        Text(
+            text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}\n" +
+                    "Weak Questions: ${questionPoolData.weakQuestions}\n" +
+                    "Current Question Score: ${questionPoolData.currentQuestionScore}",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     var checked by remember { mutableStateOf(false) }
 
     var selectedAnswer by remember { mutableIntStateOf(0) }
@@ -156,121 +187,127 @@ fun Quiz(
     val scrollState = rememberScrollState()
 
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize().padding(12.dp)
+        modifier = modifier.fillMaxSize().verticalScroll(scrollState)
+    ) {
+        if (currentQuestion.figure != "") {
+            Image(
+                painterResource(figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel),
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        Text(
+            text = currentQuestion.id,
+            textAlign = TextAlign.Left,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = currentQuestion.question,
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.selectableGroup()
+        ) {
+            val letters = listOf("A", "B" , "C", "D")
+            currentQuestion.answers.forEachIndexed { index, answer ->
+                QuestionPoolAnswer(
+                    answer = "${letters[index]}. $answer",
+                    selected = index == selectedAnswer,
+                    enabled = !checked,
+                    onSelect = {
+                        selectedAnswer = index
+                    }
+                )
+            }
+        }
+
+        AnimatedVisibility(checked) {
+            QuestionPoolSuccessCard(revealedIsCheckedCorrect, revealedCorrectLetter)
+        }
+
+        Button({
+            if (!checked) {
+                revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
+                revealedCorrectLetter = currentQuestion.correct_letter
+                checked = true
+            } else {
+                nextQuestion(!revealedIsCheckedCorrect)
+                checked = false
+                selectedAnswer = 0
+            }
+        },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = if (checked) "Next Question" else "Submit"
+            )
+        }
+    }
+}
+
+@Composable
+fun QuestionPoolAnswer(
+    answer: String,
+    selected: Boolean,
+    enabled: Boolean,
+    onSelect: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier
+            .fillMaxWidth()
+            .selectable(
+                selected = selected,
+                onClick = onSelect,
+                role = Role.RadioButton,
+                enabled = enabled
+            )
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = null
+        )
+        Text(
+            text = answer,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+    }
+}
+
+@Composable
+fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            Text(
-                text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}\n" +
-                        "Weak Questions: ${questionPoolData.weakQuestions}\n" +
-                        "Current Question Score: ${questionPoolData.currentQuestionScore}",
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.fillMaxSize().verticalScroll(scrollState)
-        ) {
-            if (currentQuestion.figure != "") {
-                Image(
-                    painterResource(figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            Text(
-                text = currentQuestion.id,
-                textAlign = TextAlign.Left,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                text = currentQuestion.question,
-                style = MaterialTheme.typography.headlineSmall
+            Image(
+                if (isCorrect) painterResource(R.drawable.outline_check_circle)
+                else painterResource(R.drawable.outline_cancel),
+                contentDescription = null
             )
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.selectableGroup()
-            ) {
-                val letters = listOf("A", "B" , "C", "D")
-                currentQuestion.answers.forEachIndexed { index, answer ->
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (index == selectedAnswer),
-                                onClick = { selectedAnswer = index },
-                                role = Role.RadioButton,
-                                enabled = !checked
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (index == selectedAnswer),
-                            onClick = null
-                        )
-                        Text(
-                            text = "${letters[index]}. $answer",
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-            }
-            AnimatedVisibility(checked) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp)
-                    ) {
-                        Image(
-                            if (revealedIsCheckedCorrect) painterResource(R.drawable.outline_check_circle)
-                            else painterResource(R.drawable.outline_cancel),
-                            contentDescription = null
-                        )
-                        Column(
-                            modifier = Modifier
-                                .padding(start = 12.dp)
-                        ) {
-                            Text(
-                                text = if (revealedIsCheckedCorrect) "Correct!" else "Wrong.",
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Text(
-                                text = if (revealedIsCheckedCorrect) "That was the right answer."
-                                else "The right answer was $revealedCorrectLetter"
-                            )
-                        }
-                    }
-                }
-            }
-
-            Button({
-                if (!checked) {
-                    revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
-                    revealedCorrectLetter = currentQuestion.correct_letter
-                    checked = true
-                } else {
-                    viewModel.nextQuestion(!revealedIsCheckedCorrect)
-                    checked = false
-                    selectedAnswer = 0
-                }
-            },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .padding(start = 12.dp)
             ) {
                 Text(
-                    text = if (checked) "Next Question" else "Submit"
+                    text = if (isCorrect) "Correct!" else "Wrong.",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = if (isCorrect) "That was the right answer."
+                    else "The right answer was $correctLetter"
                 )
             }
         }
