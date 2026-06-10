@@ -150,7 +150,9 @@ fun Quiz(
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize().padding(12.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
     ) {
         QuestionPoolDiagnostics(questionPoolData)
         QuestionPoolQuestion(currentQuestion, {
@@ -189,7 +191,9 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize().verticalScroll(scrollState)
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
         if (currentQuestion.figure != "") {
             Image(
@@ -322,11 +326,59 @@ fun AppPreview() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 600)
+@Preview(showBackground = true)
 @Composable
-fun GeneralQuizPreview() {
+fun QuestionPoolQuestionPreview() {
     HamTestTheme {
-        Quiz("general")
+        QuestionPoolQuestion(
+            HamQuestion(
+                "PREVIEW",
+                2,
+                "(wow)",
+                "Does this look cool?",
+                listOf("Yes", "Of course", "No, the FCC rules prohibit it from looking cool", "The ARRL bylaws prevent ham software from looking new"),
+                "",
+                "C"
+            ),
+            nextQuestion = { }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolDiagnosticsPreview() {
+    HamTestTheme {
+        QuestionPoolDiagnostics(
+            QuestionPoolLiveData(
+                400,
+                35,
+                2,
+                0
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolSuccessCardCorrectPreview() {
+    HamTestTheme {
+        QuestionPoolSuccessCard(
+            true,
+            "C"
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolSuccessCardWrongPreview() {
+    HamTestTheme {
+        QuestionPoolSuccessCard(
+            false,
+            "C"
+        )
     }
 }
 
