@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Ham Test</string>
+    <string name="shortcut_general_short_label">General</string>
+    <string name="shortcut_general_long_label">General Quiz</string>
+    <string name="shortcut_technician_long_label">Technician Quiz</string>
+    <string name="shortcut_technician_short_label">Technician</string>
+    <string name="shortcut_extra_long_label">Extra Quiz</string>
+    <string name="shortcut_extra_short_label">Extra</string>
 </resources>

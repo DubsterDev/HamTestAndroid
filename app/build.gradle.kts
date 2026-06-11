@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.hazelhope.dubster.hamtest"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 37
         versionCode = 102
         versionName = "1.0.2"

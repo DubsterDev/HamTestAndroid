@@ -53,10 +53,18 @@ import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val navigateTo = when (intent.action) {
+            "com.hazelhope.dubster.hamtest.OPEN_TECHNICIAN" -> "quiz/technician"
+            "com.hazelhope.dubster.hamtest.OPEN_GENERAL" -> "quiz/general"
+            "com.hazelhope.dubster.hamtest.OPEN_EXTRA" -> "quiz/extra"
+            else -> null
+        }
+
         enableEdgeToEdge()
         setContent {
             HamTestTheme {
-                App()
+                App(navigateTo = navigateTo)
             }
         }
     }
@@ -64,8 +72,17 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun App(modifier: Modifier = Modifier) {
+fun App(
+    modifier: Modifier = Modifier,
+    navigateTo: String? = null
+) {
     val navController = rememberNavController()
+
+    LaunchedEffect(navigateTo) {
+        if (navigateTo != null) {
+            navController.navigate(navigateTo)
+        }
+    }
     Scaffold(
         topBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()

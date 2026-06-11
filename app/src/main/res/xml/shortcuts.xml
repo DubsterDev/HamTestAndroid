@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="technician_quiz"
+        android:enabled="true"
+        android:icon="@drawable/technician_icon"
+        android:shortcutShortLabel="@string/shortcut_technician_short_label"
+        android:shortcutLongLabel="@string/shortcut_technician_long_label">
+        <intent
+            android:action="com.hazelhope.dubster.hamtest.OPEN_TECHNICIAN"
+            android:targetPackage="com.hazelhope.dubster.hamtest"
+            android:targetClass="com.hazelhope.dubster.hamtest.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="general_quiz"
+        android:enabled="true"
+        android:icon="@drawable/general_icon"
+        android:shortcutShortLabel="@string/shortcut_general_short_label"
+        android:shortcutLongLabel="@string/shortcut_general_long_label">
+        <intent
+            android:action="com.hazelhope.dubster.hamtest.OPEN_GENERAL"
+            android:targetPackage="com.hazelhope.dubster.hamtest"
+            android:targetClass="com.hazelhope.dubster.hamtest.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="extra_quiz"
+        android:enabled="true"
+        android:icon="@drawable/extra_icon"
+        android:shortcutShortLabel="@string/shortcut_extra_short_label"
+        android:shortcutLongLabel="@string/shortcut_extra_long_label">
+        <intent
+            android:action="com.hazelhope.dubster.hamtest.OPEN_EXTRA"
+            android:targetPackage="com.hazelhope.dubster.hamtest"
+            android:targetClass="com.hazelhope.dubster.hamtest.MainActivity" />
+    </shortcut>
+</shortcuts>
