@@ -127,11 +127,11 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                 allHamQuestions = listOf(_placeholderQuestion)
             }
 
-            val shouldUseRandomQuestion = Random.nextDouble()
+            val shouldUseRandomQuestion = Random.nextDouble() >= .6
 
             var randomQuestion = allHamQuestions[0]
 
-            if (shouldUseRandomQuestion >= .6) {
+            if (shouldUseRandomQuestion) {
                 val onlyCorrectHamQuestions = allHamQuestions.filter {
                     (it.userQuestionInfo?.score ?: -10) >= 0
                 }
