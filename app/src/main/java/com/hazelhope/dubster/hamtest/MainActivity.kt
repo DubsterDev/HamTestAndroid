@@ -294,7 +294,7 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
                 selectedAnswer = 0
             }
         },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
         ) {
             Text(
                 text = if (checked) "Next Question" else "Submit"
