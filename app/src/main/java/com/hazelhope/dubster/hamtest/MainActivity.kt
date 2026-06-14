@@ -96,7 +96,8 @@ fun App(
             val topLevel = listOf("home")
 
             val normalTitles = mapOf(
-                "home" to "Ham Test"
+                "home" to "Ham Test",
+                "settings" to "Settings"
             )
             val classTitles = mapOf(
                 "technician" to "Technician Quiz",
@@ -126,6 +127,18 @@ fun App(
                             )
                         }
                     }
+                },
+                actions = {
+                    if (
+                        topLevel.contains(currentRoute)
+                    ) {
+                        IconButton(onClick = { navController.navigate("settings") }) {
+                            Icon(
+                                painterResource(R.drawable.outline_settings),
+                                contentDescription = "Settings"
+                            )
+                        }
+                    }
                 }
             )
         },
@@ -144,6 +157,9 @@ fun App(
             composable("quiz/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
                 val quizType = it.arguments?.getString("class") ?: "unknown"
                 Quiz(quizType, modifier = newModifier)
+            }
+            composable("settings") {
+
             }
         }
     }
