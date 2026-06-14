@@ -3,8 +3,6 @@ package com.hazelhope.dubster.hamtest
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,6 +68,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     fun nextQuestion(wasQuestionWrong: Boolean, specialFirstQuestion: Boolean = false) {
         CoroutineScope(Dispatchers.IO).launch {
             val dao = _db?.userQuestionDao() ?: return@launch
+            val settingsDao = _db?.settingsDao() ?: return@launch
+            val shouldAutoSelectCorrectAnswer = settingsDao.getValue("autoSelectCorrectAnswer").getOrNull(0)?.value == "true"
 
             if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
@@ -154,16 +154,16 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
             }
 
             _currentQuestion.update {
-                shuffleHamQuestion(randomQuestion)
+                shuffleHamQuestion(randomQuestion, shouldAutoSelectCorrectAnswer)
             }
         }
     }
 
-    fun shuffleHamQuestion(hamQuestion: HamQuestion): HamQuestion {
+    fun shuffleHamQuestion(hamQuestion: HamQuestion, autoSelectCorrectAnswer: Boolean): HamQuestion {
         val correctAnswer = hamQuestion.answers[hamQuestion.correct]
         val originalShuffledAnswers = hamQuestion.answers.shuffled()
 
-        val shuffledAnswers = if (hamQuestion.userQuestionInfo?.firstTime == true) {
+        val shuffledAnswers = if (hamQuestion.userQuestionInfo?.firstTime == true && autoSelectCorrectAnswer) {
             listOf(correctAnswer) + originalShuffledAnswers.filter { answer -> answer != correctAnswer }
         } else originalShuffledAnswers
 
