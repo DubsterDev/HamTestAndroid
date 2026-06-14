@@ -241,7 +241,7 @@ fun Settings(
         modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
+        Card(
             modifier = Modifier
                 .toggleable(
                     value = isAutoSelectCorrectAnswerEnabled,
@@ -253,17 +253,33 @@ fun Settings(
                     },
                     role = Role.Switch
                 )
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
         ) {
-            Text(
-                text = "Auto select correct answers"
-            )
-            Switch(
-                isAutoSelectCorrectAnswerEnabled,
-                null
-            )
+            Row(
+                modifier = Modifier
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.weight(0.8f)
+                ) {
+                    Text(
+                        text = "Auto select correct answers",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Makes the correct answer A on new questions"
+                    )
+                }
+                Switch(
+                    isAutoSelectCorrectAnswerEnabled,
+                    null,
+                    modifier = Modifier.weight(0.2f)
+                )
+            }
         }
     }
 }
