@@ -241,45 +241,60 @@ fun Settings(
         modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Card(
-            modifier = Modifier
-                .toggleable(
-                    value = isAutoSelectCorrectAnswerEnabled,
-                    onValueChange = {
-                        isAutoSelectCorrectAnswerEnabled = it
-                        CoroutineScope(Dispatchers.IO).launch {
-                            settingsDao?.upsertSetting(SettingsItem("autoSelectCorrectAnswer", it.toString()))
-                        }
-                    },
-                    role = Role.Switch
-                )
-                .fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.weight(0.8f)
-                ) {
-                    Text(
-                        text = "Auto select correct answers",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "Makes the correct answer A on new questions"
-                    )
+        SettingsCard(
+            title = "Auto select correct answers",
+            description = "Makes the correct answer A on new questions",
+            isEnabled = isAutoSelectCorrectAnswerEnabled,
+            onToggle = {
+                isAutoSelectCorrectAnswerEnabled = it
+                CoroutineScope(Dispatchers.IO).launch {
+                    settingsDao?.upsertSetting(SettingsItem("autoSelectCorrectAnswer", it.toString()))
                 }
-                Switch(
-                    isAutoSelectCorrectAnswerEnabled,
-                    null,
-                    modifier = Modifier.weight(0.2f)
+            }
+        )
+    }
+}
+
+@Composable
+fun SettingsCard(
+    title: String,
+    description: String,
+    isEnabled: Boolean,
+    onToggle: (Boolean) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .toggleable(
+                value = isEnabled,
+                onValueChange = onToggle,
+                role = Role.Switch
+            )
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.weight(0.8f)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = description
                 )
             }
+            Switch(
+                isEnabled,
+                null,
+                modifier = Modifier.weight(0.2f)
+            )
         }
     }
 }
