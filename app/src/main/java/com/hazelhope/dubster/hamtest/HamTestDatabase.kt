@@ -11,7 +11,14 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-@Database(entities = [UserQuestionInfo::class], version = 2)
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE settings (id TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL)")
+    }
+}
+
+@Database(entities = [UserQuestionInfo::class, SettingsItem::class], version = 3)
 abstract class HamTestDatabase : RoomDatabase() {
     abstract fun userQuestionDao(): UserQuestionDao
+    abstract fun settingsDao(): SettingsDao
 }

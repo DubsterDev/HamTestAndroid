@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,13 +16,7 @@ import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 class HamTestViewModel(application: Application) : AndroidViewModel(application) {
-    private val _db = Room.databaseBuilder(
-        application,
-        HamTestDatabase::class.java,
-        "ham-test-db"
-    )
-        .addMigrations(MIGRATION_1_2)
-        .build()
+    private var _db: HamTestDatabase? = null
 
     private val _placeholderQuestion = HamQuestion(
         id = "BOB",
@@ -50,6 +45,10 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     ))
     val questionPoolData: StateFlow<QuestionPoolLiveData> = _questionPoolData.asStateFlow()
 
+    fun setDatabase(db: HamTestDatabase) {
+        _db = db
+    }
+
     fun loadQuiz(quizType: String) {
         if (this.quizType != quizType) {
             this.quizType = quizType
@@ -70,7 +69,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
     fun nextQuestion(wasQuestionWrong: Boolean, specialFirstQuestion: Boolean = false) {
         CoroutineScope(Dispatchers.IO).launch {
-            val dao = _db.userQuestionDao()
+            val dao = _db?.userQuestionDao() ?: return@launch
 
             if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))

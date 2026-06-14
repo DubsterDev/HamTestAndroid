@@ -32,3 +32,10 @@ data class UserQuestionInfo(
     val score: Int,
     val firstTime: Boolean = false
 )
+
+@Entity(tableName = "settings")
+@Serializable
+data class SettingsItem(
+    @PrimaryKey val id: String,
+    val value: String,
+)

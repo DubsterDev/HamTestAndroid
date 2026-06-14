@@ -1,6 +1,7 @@
 package com.hazelhope.dubster.hamtest
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -27,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,7 +54,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.room.Room
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,10 +71,18 @@ class MainActivity : ComponentActivity() {
             else -> null
         }
 
+        val db = Room.databaseBuilder(
+            application,
+            HamTestDatabase::class.java,
+            "ham-test-db"
+        )
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .build()
+
         enableEdgeToEdge()
         setContent {
             HamTestTheme {
-                App(navigateTo = navigateTo)
+                App(db, navigateTo = navigateTo)
             }
         }
     }
@@ -76,9 +91,11 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(
+    db: HamTestDatabase,
     modifier: Modifier = Modifier,
     navigateTo: String? = null
 ) {
+    val settingsDao = remember { db.settingsDao() }
     val navController = rememberNavController()
 
     LaunchedEffect(navigateTo) {
@@ -156,10 +173,10 @@ fun App(
             }
             composable("quiz/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
                 val quizType = it.arguments?.getString("class") ?: "unknown"
-                Quiz(quizType, modifier = newModifier)
+                Quiz(quizType, db, modifier = newModifier)
             }
             composable("settings") {
-
+                Settings(modifier = newModifier, settingsDao = settingsDao)
             }
         }
     }
@@ -203,11 +220,65 @@ fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun Settings(
+    modifier: Modifier = Modifier,
+    settingsDao: SettingsDao? = null
+) {
+    var isAutoSelectCorrectAnswerEnabled by remember {
+        mutableStateOf(
+            false
+        )
+    }
+
+    LaunchedEffect(settingsDao) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d("TAG", "Settings: ${settingsDao?.getValue("autoSelectCorrectAnswer")}")
+            isAutoSelectCorrectAnswerEnabled = settingsDao?.getValue("autoSelectCorrectAnswer")?.getOrNull(0)?.value == "true"
+        }
+    }
+
+    Column(
+        modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .toggleable(
+                    value = isAutoSelectCorrectAnswerEnabled,
+                    onValueChange = {
+                        isAutoSelectCorrectAnswerEnabled = it
+                        CoroutineScope(Dispatchers.IO).launch {
+                            settingsDao?.upsertSetting(SettingsItem("autoSelectCorrectAnswer", it.toString()))
+                        }
+                    },
+                    role = Role.Switch
+                )
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Auto select correct answers"
+            )
+            Switch(
+                isAutoSelectCorrectAnswerEnabled,
+                null
+            )
+        }
+    }
+}
+
+@Composable
 fun Quiz(
     quizType: String,
+    db: HamTestDatabase,
     modifier: Modifier = Modifier,
     viewModel: HamTestViewModel = viewModel()
 ) {
+    LaunchedEffect(db) {
+        viewModel.setDatabase(db)
+    }
+
     LaunchedEffect(quizType) {
         viewModel.loadQuiz(quizType)
     }
@@ -292,7 +363,7 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
                         .clip(RoundedCornerShape(12.dp))
                         .background(
                             if (firstTime) MaterialTheme.colorScheme.primaryContainer
-                                    else MaterialTheme.colorScheme.secondaryContainer
+                            else MaterialTheme.colorScheme.secondaryContainer
                         )
                 ) {
                     Text(
@@ -340,7 +411,9 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
                 selectedAnswer = 0
             }
         },
-            modifier = Modifier.fillMaxWidth().padding(top = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
         ) {
             Text(
                 text = if (checked) "Next Question" else "Submit"
@@ -416,9 +489,19 @@ fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier:
 
 @Preview(showBackground = true)
 @Composable
-fun AppPreview() {
+fun HomePreview() {
     HamTestTheme {
-        App()
+        Home(
+            {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SettingsPreview() {
+    HamTestTheme {
+        Settings()
     }
 }
 
