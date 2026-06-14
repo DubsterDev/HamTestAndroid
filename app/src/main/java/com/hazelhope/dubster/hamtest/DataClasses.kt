@@ -29,5 +29,6 @@ data class QuestionPoolLiveData(
 data class UserQuestionInfo(
     @PrimaryKey val id: String,
     val pool: String,
-    val score: Int
+    val score: Int,
+    val firstTime: Boolean = false
 )

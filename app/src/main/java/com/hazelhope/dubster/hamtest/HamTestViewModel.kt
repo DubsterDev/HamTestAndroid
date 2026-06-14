@@ -19,7 +19,9 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
         application,
         HamTestDatabase::class.java,
         "ham-test-db"
-    ).build()
+    )
+        .addMigrations(MIGRATION_1_2)
+        .build()
 
     private val _placeholderQuestion = HamQuestion(
         id = "BOB",
@@ -107,7 +109,8 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                     val newQuestionInfo = UserQuestionInfo(
                         id = newQuestion.id,
                         pool = quizType,
-                        score = -2
+                        score = -2,
+                        firstTime = true
                     )
 
                     dao.insertAll(newQuestionInfo)
@@ -159,7 +162,12 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
     fun shuffleHamQuestion(hamQuestion: HamQuestion): HamQuestion {
         val correctAnswer = hamQuestion.answers[hamQuestion.correct]
-        val shuffledAnswers = hamQuestion.answers.shuffled()
+        val originalShuffledAnswers = hamQuestion.answers.shuffled()
+
+        val shuffledAnswers = if (hamQuestion.userQuestionInfo?.firstTime == true) {
+            listOf(correctAnswer) + originalShuffledAnswers.filter { answer -> answer != correctAnswer }
+        } else originalShuffledAnswers
+
         val newCorrectAnswer = shuffledAnswers.indexOf(correctAnswer)
         val newCorrectAnswerLetter = listOf("A", "B", "C", "D")[newCorrectAnswer]
         return hamQuestion.copy(

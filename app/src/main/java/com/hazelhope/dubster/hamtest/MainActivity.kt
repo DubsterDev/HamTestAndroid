@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -252,12 +255,39 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        Text(
-            text = currentQuestion.id,
-            textAlign = TextAlign.Left,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
-        )
+        ) {
+            Text(
+                text = currentQuestion.id,
+                textAlign = TextAlign.Left,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            val firstTime = currentQuestion.userQuestionInfo?.firstTime == true
+            val weakQuestion = if (currentQuestion.userQuestionInfo != null) currentQuestion.userQuestionInfo.score < 0
+            else false
+
+            if (firstTime || weakQuestion) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            if (firstTime) MaterialTheme.colorScheme.primaryContainer
+                                    else MaterialTheme.colorScheme.secondaryContainer
+                        )
+                ) {
+                    Text(
+                        text = if (firstTime) "New"
+                        else "Weak",
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp, vertical = 3.dp)
+                    )
+                }
+            }
+        }
         Text(
             text = currentQuestion.question,
             style = MaterialTheme.typography.headlineSmall
@@ -388,7 +418,13 @@ fun QuestionPoolQuestionPreview() {
                 "Does this look cool?",
                 listOf("Yes", "Of course", "No, the FCC rules prohibit it from looking cool", "The ARRL bylaws prevent ham software from looking new"),
                 "",
-                "C"
+                "C",
+                UserQuestionInfo(
+                    "PREVIEW",
+                    "preview",
+                    -2,
+                    false
+                )
             ),
             nextQuestion = { }
         )

@@ -16,7 +16,7 @@ interface UserQuestionDao {
     @Query("SELECT * FROM question_info WHERE id IN (:ids)")
     fun loadAllByIds(ids: List<String>): List<UserQuestionInfo>
 
-    @Query("UPDATE question_info SET score = :score WHERE id = :id")
+    @Query("UPDATE question_info SET score = :score, firstTime = 0 WHERE id = :id")
     fun updateScore(id: String, score: Int)
 
     @Insert
