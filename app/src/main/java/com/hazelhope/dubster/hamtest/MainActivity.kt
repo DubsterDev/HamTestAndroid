@@ -26,6 +26,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -382,6 +383,10 @@ fun Quiz(
                 viewModel.nextQuestion(false)
             })
         } else {
+            LinearProgressIndicator(
+                progress = { (questionPoolData.inUsePoolSize / questionPoolData.totalPoolSize).toFloat() },
+                modifier = Modifier.fillMaxWidth()
+            )
             QuestionPoolDiagnostics(questionPoolData)
             QuestionPoolQuestion(currentQuestion, {
                 viewModel.nextQuestion(it)
