@@ -90,7 +90,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
             if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
-                var score = -2
+                var score = if (shouldAutoSelectCorrectAnswer) -3 else -2
                 var didExist = false
                 if (!oldUserQuestion.isEmpty()) {
                     score = oldUserQuestion[0].score
@@ -125,7 +125,7 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
                     val newQuestionInfo = UserQuestionInfo(
                         id = newQuestion.id,
                         pool = quizType,
-                        score = -2,
+                        score = if (shouldAutoSelectCorrectAnswer) -3 else -2,
                         firstTime = true
                     )
 
