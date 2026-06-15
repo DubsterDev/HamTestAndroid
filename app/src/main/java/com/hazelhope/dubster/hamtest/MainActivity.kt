@@ -1,7 +1,6 @@
 package com.hazelhope.dubster.hamtest
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -230,10 +229,16 @@ fun Settings(
         )
     }
 
+    var isBreakTheFlowEnabled by remember {
+        mutableStateOf(
+            false
+        )
+    }
+
     LaunchedEffect(settingsDao) {
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d("TAG", "Settings: ${settingsDao?.getValue("autoSelectCorrectAnswer")}")
             isAutoSelectCorrectAnswerEnabled = settingsDao?.getValue("autoSelectCorrectAnswer")?.getOrNull(0)?.value == "true"
+            isBreakTheFlowEnabled = settingsDao?.getValue("breakTheFlow")?.getOrNull(0)?.value == "true"
         }
     }
 
@@ -249,6 +254,17 @@ fun Settings(
                 isAutoSelectCorrectAnswerEnabled = it
                 CoroutineScope(Dispatchers.IO).launch {
                     settingsDao?.upsertSetting(SettingsItem("autoSelectCorrectAnswer", it.toString()))
+                }
+            }
+        )
+        SettingsCard(
+            title = "Break the flow",
+            description = "Reminders every fifteen minutes (just in case you should be doing something else)",
+            isEnabled = isBreakTheFlowEnabled,
+            onToggle = {
+                isBreakTheFlowEnabled = it
+                CoroutineScope(Dispatchers.IO).launch {
+                    settingsDao?.upsertSetting(SettingsItem("breakTheFlow", it.toString()))
                 }
             }
         )
@@ -318,6 +334,8 @@ fun Quiz(
 
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
 
+    val shouldBreakTheFlow by viewModel.shouldBreakTheFlow.collectAsStateWithLifecycle()
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -325,10 +343,16 @@ fun Quiz(
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        QuestionPoolDiagnostics(questionPoolData)
-        QuestionPoolQuestion(currentQuestion, {
-            viewModel.nextQuestion(it)
-        })
+        if (shouldBreakTheFlow != 0) {
+            BreakTheFlow(shouldBreakTheFlow, {
+                viewModel.nextQuestion(false)
+            })
+        } else {
+            QuestionPoolDiagnostics(questionPoolData)
+            QuestionPoolQuestion(currentQuestion, {
+                viewModel.nextQuestion(it)
+            })
+        }
     }
 }
 
@@ -518,6 +542,49 @@ fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier:
     }
 }
 
+@Composable
+fun BreakTheFlow(minutes: Int, onContinue: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize().padding(12.dp)
+    ) {
+        val icon = when {
+            minutes <= 15 -> R.drawable.emoji_grin
+            minutes <= 30 -> R.drawable.emoji_grin_with_big_eyes
+            minutes <= 45 -> R.drawable.emoji_grin_with_teeth
+            minutes <= 60 -> R.drawable.emoji_wow
+            minutes <= 75 -> R.drawable.emoji_astonished
+            else -> R.drawable.emoji_shocked
+        }
+
+        Image(
+            painterResource(icon),
+            contentDescription = "Emoji representing how long you've done this for",
+            modifier = Modifier.fillMaxWidth(0.5f)
+        )
+        Text(
+            text = "You've been studying for $minutes minutes!",
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = "Do you want to continue?",
+            textAlign = TextAlign.Center
+        )
+        Button(
+            onContinue,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+        ) {
+            Text(
+                text = "Yes, see the next question"
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
@@ -595,6 +662,14 @@ fun QuestionPoolSuccessCardWrongPreview() {
             false,
             "C"
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BreakTheFlowPreview() {
+    HamTestTheme {
+        BreakTheFlow(90, {})
     }
 }
 

@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
 
 class HamTestViewModel(application: Application) : AndroidViewModel(application) {
     private var _db: HamTestDatabase? = null
@@ -43,6 +45,12 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     ))
     val questionPoolData: StateFlow<QuestionPoolLiveData> = _questionPoolData.asStateFlow()
 
+    private var startTime = Clock.System.now()
+    private var lastReminder = Clock.System.now()
+
+    private val _shouldBreakTheFlow = MutableStateFlow(0)
+    val shouldBreakTheFlow: StateFlow<Int> = _shouldBreakTheFlow.asStateFlow()
+
     fun setDatabase(db: HamTestDatabase) {
         _db = db
     }
@@ -50,6 +58,9 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     fun loadQuiz(quizType: String) {
         if (this.quizType != quizType) {
             this.quizType = quizType
+            this.startTime = Clock.System.now()
+            this.lastReminder = Clock.System.now()
+
             val rawQuiz = this.application.assets.open("$quizType.json").bufferedReader().use { it.readText() }
             _quiz = Json.decodeFromString<List<HamQuestion>>(rawQuiz)
 
@@ -66,10 +77,16 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun nextQuestion(wasQuestionWrong: Boolean, specialFirstQuestion: Boolean = false) {
+        if (_shouldBreakTheFlow.value != 0) {
+            _shouldBreakTheFlow.update { 0 }
+            return
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             val dao = _db?.userQuestionDao() ?: return@launch
             val settingsDao = _db?.settingsDao() ?: return@launch
             val shouldAutoSelectCorrectAnswer = settingsDao.getValue("autoSelectCorrectAnswer").getOrNull(0)?.value == "true"
+            val breakTheFlowEnabled = settingsDao.getValue("breakTheFlow").getOrNull(0)?.value == "true"
 
             if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
@@ -155,6 +172,17 @@ class HamTestViewModel(application: Application) : AndroidViewModel(application)
 
             _currentQuestion.update {
                 shuffleHamQuestion(randomQuestion, shouldAutoSelectCorrectAnswer)
+            }
+
+            val now = Clock.System.now()
+            val diff = now - lastReminder
+            val totalDiff = now - startTime
+
+            if (diff >= 15.minutes && breakTheFlowEnabled) {
+                _shouldBreakTheFlow.update {
+                    totalDiff.inWholeMinutes.toInt()
+                }
+                lastReminder = now
             }
         }
     }
