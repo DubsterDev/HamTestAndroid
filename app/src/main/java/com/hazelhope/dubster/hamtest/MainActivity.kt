@@ -550,12 +550,12 @@ fun BreakTheFlow(minutes: Int, onContinue: () -> Unit, modifier: Modifier = Modi
         modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
         val icon = when {
-            minutes <= 15 -> R.drawable.emoji_grin
-            minutes <= 30 -> R.drawable.emoji_grin_with_big_eyes
-            minutes <= 45 -> R.drawable.emoji_grin_with_teeth
-            minutes <= 60 -> R.drawable.emoji_wow
-            minutes <= 75 -> R.drawable.emoji_astonished
-            else -> R.drawable.emoji_shocked
+            minutes >= 90 -> R.drawable.emoji_shocked
+            minutes >= 75 -> R.drawable.emoji_astonished
+            minutes >= 60 -> R.drawable.emoji_wow
+            minutes >= 45 -> R.drawable.emoji_grin_with_teeth
+            minutes >= 30 -> R.drawable.emoji_grin_with_big_eyes
+            else -> R.drawable.emoji_grin
         }
 
         Image(
