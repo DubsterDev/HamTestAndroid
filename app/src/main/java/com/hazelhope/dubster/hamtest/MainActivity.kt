@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -244,12 +245,19 @@ fun Settings(
 
     Column(
         modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
+        Text(
+            text = "Quiz Behavior",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(6.dp)
+        )
         SettingsCard(
             title = "Auto select correct answers",
             description = "Makes the correct answer A on new questions",
             isEnabled = isAutoSelectCorrectAnswerEnabled,
+            position = "top",
             onToggle = {
                 isAutoSelectCorrectAnswerEnabled = it
                 CoroutineScope(Dispatchers.IO).launch {
@@ -260,6 +268,7 @@ fun Settings(
         SettingsCard(
             title = "Break the flow",
             description = "Reminders every fifteen minutes (just in case you should be doing something else)",
+            position = "bottom",
             isEnabled = isBreakTheFlowEnabled,
             onToggle = {
                 isBreakTheFlowEnabled = it
@@ -275,11 +284,36 @@ fun Settings(
 fun SettingsCard(
     title: String,
     description: String,
+    position: String,
     isEnabled: Boolean,
-    onToggle: (Boolean) -> Unit
+    onToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    val shape = when (position) {
+        "top" -> RoundedCornerShape(
+            topStart = 12.dp,
+            topEnd = 12.dp,
+            bottomStart = 0.dp,
+            bottomEnd = 0.dp
+        )
+        "bottom" -> RoundedCornerShape(
+            topStart = 0.dp,
+            topEnd = 0.dp,
+            bottomStart = 12.dp,
+            bottomEnd = 12.dp
+        )
+        else -> RoundedCornerShape(12.dp)
+    }
+
     Card(
-        modifier = Modifier
+        shape = shape,
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.background,
+            disabledContentColor = MaterialTheme.colorScheme.onBackground,
+        ),
+        modifier = modifier
             .toggleable(
                 value = isEnabled,
                 onValueChange = onToggle,
