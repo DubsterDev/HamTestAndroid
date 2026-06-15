@@ -245,7 +245,9 @@ fun Settings(
     }
 
     Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 12.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         Text(
@@ -384,7 +386,7 @@ fun Quiz(
             })
         } else {
             LinearProgressIndicator(
-                progress = { (questionPoolData.inUsePoolSize / questionPoolData.totalPoolSize).toFloat() },
+                progress = { questionPoolData.inUsePoolSize / (questionPoolData.totalPoolSize * 1f) },
                 modifier = Modifier.fillMaxWidth()
             )
             QuestionPoolDiagnostics(questionPoolData)
@@ -586,7 +588,9 @@ fun BreakTheFlow(minutes: Int, onContinue: () -> Unit, modifier: Modifier = Modi
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize().padding(12.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
     ) {
         val icon = when {
             minutes >= 90 -> R.drawable.emoji_shocked
