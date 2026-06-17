@@ -1,0 +1,394 @@
+[
+  {
+    "id": "T1A04",
+    "correct": 0,
+    "refs": "[97.5(b)(1)]",
+    "question": "How many operator/primary station license grants may be held by any one person?",
+    "answers": [
+      "One",
+      "No more than two",
+      "One for each band on which the person plans to operate",
+      "One for each permanent station location from which the person plans to operate"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T1A06",
+    "correct": 3,
+    "refs": "[97.3(a)(9)]",
+    "question": "What is the FCC Part 97 definition of a beacon?",
+    "answers": [
+      "A government transmitter marking the amateur radio band edges",
+      "A bulletin sent by the FCC to announce a national emergency",
+      "A continuous transmission of weather information authorized in the amateur bands by the National Weather Service",
+      "An amateur station transmitting communications for the purposes of observing propagation or related experimental activities"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1A10",
+    "correct": 3,
+    "refs": "[97.3(a)(38), 97.407]",
+    "question": "What is the Radio Amateur Civil Emergency Service (RACES)?",
+    "answers": [
+      "A radio service using amateur frequencies for emergency management or civil defense communications",
+      "A radio service using amateur stations for emergency management or civil defense communications",
+      "An emergency service using amateur operators certified by a civil defense organization as being enrolled in that organization",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1A11",
+    "correct": 1,
+    "refs": "[97.101 (d)]",
+    "question": "When is willful interference to other amateur radio stations permitted?",
+    "answers": [
+      "To stop another amateur station that is breaking the FCC rules",
+      "At no time",
+      "When making short test transmissions",
+      "At any time, stations in the Amateur Radio Service are not protected from willful interference"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  },
+  {
+    "id": "T1B05",
+    "correct": 3,
+    "refs": "[97.305(c)]",
+    "question": "How may amateurs use the 219 to 220 MHz segment of 1.25 meter band?",
+    "answers": [
+      "Spread spectrum only",
+      "Fast-scan television only",
+      "Emergency traffic only",
+      "Fixed digital message forwarding systems only"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1C06",
+    "correct": 3,
+    "refs": "[97.5(a)(2)]",
+    "question": "From which of the following locations may an FCC-licensed amateur station transmit?",
+    "answers": [
+      "From within any country that belongs to the International Telecommunication Union",
+      "From within any country that is a member of the United Nations",
+      "From anywhere within International Telecommunication Union (ITU) Regions 2 and 3",
+      "From any vessel or craft located in international waters and documented or registered in the United States"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1C07",
+    "correct": 1,
+    "refs": "[97.23]",
+    "question": "Which of the following can result in revocation of the station license or suspension of the operator license?",
+    "answers": [
+      "Failure to inform the FCC of any changes in the amateur station following performance of an RF safety environmental evaluation",
+      "Failure to provide and maintain a correct email address with the FCC",
+      "Failure to obtain FCC type acceptance prior to using a home-built transmitter",
+      "Failure to have a copy of your license available at your station"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  },
+  {
+    "id": "T1D07",
+    "correct": 3,
+    "refs": "[97.113(d)]",
+    "question": "What types of amateur stations can automatically retransmit the signals of other amateur stations?",
+    "answers": [
+      "Auxiliary, beacon, or Earth stations",
+      "Earth, repeater, or space stations",
+      "Beacon, repeater, or space stations",
+      "Repeater, auxiliary, or space stations"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1E09",
+    "correct": 3,
+    "refs": "[97.109(c)]",
+    "question": "Which of the following are required for remote control operation?",
+    "answers": [
+      "The control operator must be at the control point",
+      "A control operator is required at all times",
+      "The control operator must indirectly manipulate the controls",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T1E11",
+    "correct": 3,
+    "refs": "[97.103(a)]",
+    "question": "Who does the FCC presume to be the control operator of an amateur station, unless documentation to the contrary is in the station records?",
+    "answers": [
+      "The station custodian",
+      "The third party participant",
+      "The person operating the station equipment",
+      "The station licensee"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T2A12",
+    "correct": 3,
+    "refs": "",
+    "question": "What should you do before calling CQ?",
+    "answers": [
+      "Listen first to be sure that no one else is using the frequency",
+      "Ask if the frequency is in use",
+      "Make sure you are authorized to use that frequency",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T2B12",
+    "correct": 0,
+    "refs": "",
+    "question": "What is the purpose of the color code used on DMR repeater systems?",
+    "answers": [
+      "Must match the repeater color code for access",
+      "Defines the frequency pair to use",
+      "Identifies the codec used",
+      "Defines the minimum signal level required for access"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T2C08",
+    "correct": 0,
+    "refs": "",
+    "question": "Which of the following is a characteristic of good traffic handling?",
+    "answers": [
+      "Passing messages exactly as received",
+      "Making decisions as to whether messages are worthy of relay or delivery",
+      "Ensuring that any newsworthy messages are relayed to the news media",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T4B04",
+    "correct": 1,
+    "refs": "",
+    "question": "What is a way to enable quick access to a favorite frequency or channel on your transceiver?",
+    "answers": [
+      "Enable the frequency offset",
+      "Store it in a memory channel",
+      "Enable the VOX",
+      "Use the scan mode to select the desired frequency"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  },
+  {
+    "id": "T4B07",
+    "correct": 1,
+    "refs": "",
+    "question": "What does a DMR “code plug” contain?",
+    "answers": [
+      "Your call sign in CW for automatic identification",
+      "Access information for repeaters and talkgroups",
+      "The codec for digitizing audio",
+      "The DMR software version"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  },
+  {
+    "id": "T5A04",
+    "correct": 2,
+    "refs": "",
+    "question": "What are the units of electrical resistance?",
+    "answers": [
+      "Siemens",
+      "Mhos",
+      "Ohms",
+      "Coulombs"
+    ],
+    "figure": "",
+    "correct_letter": "C"
+  },
+  {
+    "id": "T5C06",
+    "correct": 0,
+    "refs": "",
+    "question": "What does the abbreviation “RF” mean?",
+    "answers": [
+      "Radio frequency signals of all types",
+      "The resonant frequency of a tuned circuit",
+      "The real frequency transmitted as opposed to the apparent frequency",
+      "Reflective force in antenna transmission lines"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T6A09",
+    "correct": 0,
+    "refs": "",
+    "question": "What electrical component is used to protect other circuit components from current overloads?",
+    "answers": [
+      "Fuse",
+      "Thyratron",
+      "Varactor",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T6B11",
+    "correct": 0,
+    "refs": "",
+    "question": "What is the term that describes a device's ability to amplify a signal?",
+    "answers": [
+      "Gain",
+      "Forward resistance",
+      "Forward voltage drop",
+      "On resistance"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T7A11",
+    "correct": 0,
+    "refs": "",
+    "question": "Where is an RF preamplifier installed?",
+    "answers": [
+      "Between the antenna and receiver",
+      "At the output of the transmitter power amplifier",
+      "Between the transmitter and the antenna tuner",
+      "At the output of the receiver audio amplifier"
+    ],
+    "figure": "",
+    "correct_letter": "A"
+  },
+  {
+    "id": "T7B04",
+    "correct": 3,
+    "refs": "",
+    "question": "Which of the following could you use to cure distorted audio caused by RF current on the shield of a microphone cable?",
+    "answers": [
+      "Band-pass filter",
+      "Low-pass filter",
+      "Preamplifier",
+      "Ferrite choke"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T7B11",
+    "correct": 2,
+    "refs": "",
+    "question": "What is a symptom of RF feedback in a transmitter or transceiver?",
+    "answers": [
+      "Excessive SWR at the antenna connection",
+      "The transmitter will not stay on the desired frequency",
+      "Reports of garbled, distorted, or unintelligible voice transmissions",
+      "Frequent blowing of power supply fuses"
+    ],
+    "figure": "",
+    "correct_letter": "C"
+  },
+  {
+    "id": "T7C11",
+    "correct": 2,
+    "refs": "",
+    "question": "What is a disadvantage of air core coaxial cable when compared to foam or solid dielectric types?",
+    "answers": [
+      "It has more loss per foot",
+      "It cannot be used for VHF or UHF antennas",
+      "It requires special techniques to prevent moisture in the cable",
+      "It cannot be used at below freezing temperatures"
+    ],
+    "figure": "",
+    "correct_letter": "C"
+  },
+  {
+    "id": "T8B10",
+    "correct": 3,
+    "refs": "",
+    "question": "What is a LEO satellite?",
+    "answers": [
+      "A sun synchronous satellite",
+      "A highly elliptical orbit satellite",
+      "A satellite in low energy operation mode",
+      "A satellite in low earth orbit"
+    ],
+    "figure": "",
+    "correct_letter": "D"
+  },
+  {
+    "id": "T9A03",
+    "correct": 1,
+    "refs": "",
+    "question": "Which of the following describes a simple dipole oriented parallel to Earth's surface?",
+    "answers": [
+      "A ground-wave antenna",
+      "A horizontally polarized antenna",
+      "A travelling-wave antenna",
+      "A vertically polarized antenna"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  },
+  {
+    "id": "T9A08",
+    "correct": 2,
+    "refs": "",
+    "question": "What is the approximate length, in inches, of a quarter-wavelength vertical antenna for 146 MHz?",
+    "answers": [
+      "112",
+      "50",
+      "19",
+      "12"
+    ],
+    "figure": "",
+    "correct_letter": "C"
+  },
+  {
+    "id": "T9A09",
+    "correct": 2,
+    "refs": "",
+    "question": "What is the approximate length, in inches, of a half-wavelength 6 meter dipole antenna?",
+    "answers": [
+      "6",
+      "50",
+      "112",
+      "236"
+    ],
+    "figure": "",
+    "correct_letter": "C"
+  },
+  {
+    "id": "T9B01",
+    "correct": 1,
+    "refs": "",
+    "question": "What is a benefit of low SWR?",
+    "answers": [
+      "Reduced television interference",
+      "Reduced signal loss",
+      "Less antenna wear",
+      "All these choices are correct"
+    ],
+    "figure": "",
+    "correct_letter": "B"
+  }
+]

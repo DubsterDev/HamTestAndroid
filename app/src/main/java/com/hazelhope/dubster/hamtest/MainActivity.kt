@@ -195,6 +195,14 @@ fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
+                goToQuiz("removedtech2022")
+            },
+            modifier = Modifier.fillMaxWidth(.75f)
+        ) {
+            Text("Technician (questions removed in 2026)")
+        }
+        Button(
+            onClick = {
                 goToQuiz("technician")
             },
             modifier = Modifier.fillMaxWidth(.75f)
