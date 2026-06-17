@@ -1,6 +1,6 @@
 [
   {
-    "id": "T1A04",
+    "id": "OLDT1A04",
     "correct": 0,
     "refs": "[97.5(b)(1)]",
     "question": "How many operator/primary station license grants may be held by any one person?",
@@ -14,7 +14,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T1A06",
+    "id": "OLDT1A06",
     "correct": 3,
     "refs": "[97.3(a)(9)]",
     "question": "What is the FCC Part 97 definition of a beacon?",
@@ -28,7 +28,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1A10",
+    "id": "OLDT1A10",
     "correct": 3,
     "refs": "[97.3(a)(38), 97.407]",
     "question": "What is the Radio Amateur Civil Emergency Service (RACES)?",
@@ -42,7 +42,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1A11",
+    "id": "OLDT1A11",
     "correct": 1,
     "refs": "[97.101 (d)]",
     "question": "When is willful interference to other amateur radio stations permitted?",
@@ -56,7 +56,7 @@
     "correct_letter": "B"
   },
   {
-    "id": "T1B05",
+    "id": "OLDT1B05",
     "correct": 3,
     "refs": "[97.305(c)]",
     "question": "How may amateurs use the 219 to 220 MHz segment of 1.25 meter band?",
@@ -70,7 +70,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1C06",
+    "id": "OLDT1C06",
     "correct": 3,
     "refs": "[97.5(a)(2)]",
     "question": "From which of the following locations may an FCC-licensed amateur station transmit?",
@@ -84,7 +84,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1C07",
+    "id": "OLDT1C07",
     "correct": 1,
     "refs": "[97.23]",
     "question": "Which of the following can result in revocation of the station license or suspension of the operator license?",
@@ -98,7 +98,7 @@
     "correct_letter": "B"
   },
   {
-    "id": "T1D07",
+    "id": "OLDT1D07",
     "correct": 3,
     "refs": "[97.113(d)]",
     "question": "What types of amateur stations can automatically retransmit the signals of other amateur stations?",
@@ -112,7 +112,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1E09",
+    "id": "OLDT1E09",
     "correct": 3,
     "refs": "[97.109(c)]",
     "question": "Which of the following are required for remote control operation?",
@@ -126,7 +126,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T1E11",
+    "id": "OLDT1E11",
     "correct": 3,
     "refs": "[97.103(a)]",
     "question": "Who does the FCC presume to be the control operator of an amateur station, unless documentation to the contrary is in the station records?",
@@ -140,7 +140,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T2A12",
+    "id": "OLDT2A12",
     "correct": 3,
     "refs": "",
     "question": "What should you do before calling CQ?",
@@ -154,7 +154,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T2B12",
+    "id": "OLDT2B12",
     "correct": 0,
     "refs": "",
     "question": "What is the purpose of the color code used on DMR repeater systems?",
@@ -168,7 +168,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T2C08",
+    "id": "OLDT2C08",
     "correct": 0,
     "refs": "",
     "question": "Which of the following is a characteristic of good traffic handling?",
@@ -182,7 +182,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T4B04",
+    "id": "OLDT4B04",
     "correct": 1,
     "refs": "",
     "question": "What is a way to enable quick access to a favorite frequency or channel on your transceiver?",
@@ -196,7 +196,7 @@
     "correct_letter": "B"
   },
   {
-    "id": "T4B07",
+    "id": "OLDT4B07",
     "correct": 1,
     "refs": "",
     "question": "What does a DMR “code plug” contain?",
@@ -210,7 +210,7 @@
     "correct_letter": "B"
   },
   {
-    "id": "T5A04",
+    "id": "OLDT5A04",
     "correct": 2,
     "refs": "",
     "question": "What are the units of electrical resistance?",
@@ -224,7 +224,7 @@
     "correct_letter": "C"
   },
   {
-    "id": "T5C06",
+    "id": "OLDT5C06",
     "correct": 0,
     "refs": "",
     "question": "What does the abbreviation “RF” mean?",
@@ -238,7 +238,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T6A09",
+    "id": "OLDT6A09",
     "correct": 0,
     "refs": "",
     "question": "What electrical component is used to protect other circuit components from current overloads?",
@@ -252,7 +252,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T6B11",
+    "id": "OLDT6B11",
     "correct": 0,
     "refs": "",
     "question": "What is the term that describes a device's ability to amplify a signal?",
@@ -266,7 +266,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T7A11",
+    "id": "OLDT7A11",
     "correct": 0,
     "refs": "",
     "question": "Where is an RF preamplifier installed?",
@@ -280,7 +280,7 @@
     "correct_letter": "A"
   },
   {
-    "id": "T7B04",
+    "id": "OLDT7B04",
     "correct": 3,
     "refs": "",
     "question": "Which of the following could you use to cure distorted audio caused by RF current on the shield of a microphone cable?",
@@ -294,7 +294,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T7B11",
+    "id": "OLDT7B11",
     "correct": 2,
     "refs": "",
     "question": "What is a symptom of RF feedback in a transmitter or transceiver?",
@@ -308,7 +308,7 @@
     "correct_letter": "C"
   },
   {
-    "id": "T7C11",
+    "id": "OLDT7C11",
     "correct": 2,
     "refs": "",
     "question": "What is a disadvantage of air core coaxial cable when compared to foam or solid dielectric types?",
@@ -322,7 +322,7 @@
     "correct_letter": "C"
   },
   {
-    "id": "T8B10",
+    "id": "OLDT8B10",
     "correct": 3,
     "refs": "",
     "question": "What is a LEO satellite?",
@@ -336,7 +336,7 @@
     "correct_letter": "D"
   },
   {
-    "id": "T9A03",
+    "id": "OLDT9A03",
     "correct": 1,
     "refs": "",
     "question": "Which of the following describes a simple dipole oriented parallel to Earth's surface?",
@@ -350,7 +350,7 @@
     "correct_letter": "B"
   },
   {
-    "id": "T9A08",
+    "id": "OLDT9A08",
     "correct": 2,
     "refs": "",
     "question": "What is the approximate length, in inches, of a quarter-wavelength vertical antenna for 146 MHz?",
@@ -364,7 +364,7 @@
     "correct_letter": "C"
   },
   {
-    "id": "T9A09",
+    "id": "OLDT9A09",
     "correct": 2,
     "refs": "",
     "question": "What is the approximate length, in inches, of a half-wavelength 6 meter dipole antenna?",
@@ -378,7 +378,7 @@
     "correct_letter": "C"
   },
   {
-    "id": "T9B01",
+    "id": "OLDT9B01",
     "correct": 1,
     "refs": "",
     "question": "What is a benefit of low SWR?",
