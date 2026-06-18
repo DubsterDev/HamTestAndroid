@@ -24,10 +24,10 @@ data class QuestionPoolLiveData(
     val currentQuestionScore: Int
 )
 
-@Entity(tableName = "question_info")
+@Entity(tableName = "question_info", primaryKeys = ["id", "pool"])
 @Serializable
 data class UserQuestionInfo(
-    @PrimaryKey val id: String,
+    val id: String,
     val pool: String,
     val score: Int,
     val firstTime: Boolean = false

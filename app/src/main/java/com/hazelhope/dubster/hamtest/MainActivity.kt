@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
             HamTestDatabase::class.java,
             "ham-test-db"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
 
         enableEdgeToEdge()
