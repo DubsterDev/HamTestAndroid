@@ -233,14 +233,11 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Bottom,
         modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
-        Text(
-            text = "Pick a test to begin"
-        )
         Button(
             onClick = {
                 goToQuiz("removedtech2022")
             },
-            modifier = Modifier.fillMaxWidth(.75f)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Technician (questions removed in 2026)")
         }
@@ -248,7 +245,7 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
             onClick = {
                 goToQuiz("technician")
             },
-            modifier = Modifier.fillMaxWidth(.75f)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Technician")
         }
@@ -256,7 +253,7 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
             onClick = {
                 goToQuiz("general")
             },
-            modifier = Modifier.fillMaxWidth(.75f)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("General")
         }
@@ -264,7 +261,7 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
             onClick = {
                 goToQuiz("extra")
             },
-            modifier = Modifier.fillMaxWidth(.75f)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text("Extra")
         }
