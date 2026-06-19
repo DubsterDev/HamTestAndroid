@@ -20,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -86,6 +88,9 @@ fun App(
     val settingsDao = remember { db.settingsDao() }
     val navController = rememberNavController()
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+
     LaunchedEffect(navigateTo) {
         if (navigateTo != null) {
             navController.navigate(navigateTo)
@@ -94,6 +99,14 @@ fun App(
     Scaffold(
         topBar = {
             TopBar(navController)
+        },
+        bottomBar = {
+            BottomBar(
+                currentRoute,
+                { to ->
+                    navController.navigate(to)
+                }
+            )
         },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
@@ -123,7 +136,6 @@ fun App(
 fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "home"
-
     val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
 
     val topLevel = listOf("home")
@@ -176,6 +188,53 @@ fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
         },
         modifier = modifier
     )
+}
+
+@Composable
+fun BottomBar(currentRoute: String, navigate: (String) -> Unit, modifier: Modifier = Modifier) {
+    NavigationBar(
+        modifier = modifier
+    ) {
+        NavigationBarItem(
+            selected = currentRoute == "home",
+            onClick = {
+                navigate("home")
+            },
+            icon = {
+                Icon(
+                    painterResource(R.drawable.outline_book_2),
+                    contentDescription = "Study"
+                )
+            },
+            label = { Text("Study") }
+        )
+        NavigationBarItem(
+            selected = currentRoute == "practice",
+            onClick = {
+                navigate("practice")
+            },
+            icon = {
+                Icon(
+                    painterResource(R.drawable.outline_format_list_numbered),
+                    contentDescription = "Practice"
+                )
+            },
+            label = { Text("Practice") }
+        )
+        NavigationBarItem(
+            selected = currentRoute == "settings",
+            onClick = {
+                navigate("settings")
+            },
+            icon = {
+                Icon(
+                    painterResource(R.drawable.outline_settings),
+                    contentDescription = "Settings"
+                )
+            },
+            label = { Text("Settings") }
+        )
+    }
 }
 
 @Composable
