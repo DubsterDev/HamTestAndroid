@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -92,60 +93,7 @@ fun App(
     }
     Scaffold(
         topBar = {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route ?: "home"
-
-            val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
-
-            val topLevel = listOf("home")
-
-            val normalTitles = mapOf(
-                "home" to "Ham Test",
-                "settings" to "Settings"
-            )
-            val classTitles = mapOf(
-                "removedtech2022" to "Technician (removed in 2026)",
-                "technician" to "Technician Quiz",
-                "general" to "General Quiz",
-                "extra" to "Extra Quiz"
-            )
-
-            val title = if (currentRoute.startsWith("quiz/"))
-                classTitles[hamClass] ?: hamClass
-            else normalTitles[currentRoute] ?: currentRoute
-
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = title
-                    )
-                },
-                navigationIcon = {
-                    if (
-                        navController.previousBackStackEntry != null
-                        && !topLevel.contains(currentRoute)
-                        ) {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                painterResource(R.drawable.outline_arrow_back),
-                                contentDescription = "Back"
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (
-                        topLevel.contains(currentRoute)
-                    ) {
-                        IconButton(onClick = { navController.navigate("settings") }) {
-                            Icon(
-                                painterResource(R.drawable.outline_settings),
-                                contentDescription = "Settings"
-                            )
-                        }
-                    }
-                }
-            )
+            TopBar(navController)
         },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
@@ -168,6 +116,66 @@ fun App(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+
+    val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
+
+    val topLevel = listOf("home")
+
+    val normalTitles = mapOf(
+        "home" to "Ham Test",
+        "settings" to "Settings"
+    )
+    val classTitles = mapOf(
+        "removedtech2022" to "Technician (removed in 2026)",
+        "technician" to "Technician Quiz",
+        "general" to "General Quiz",
+        "extra" to "Extra Quiz"
+    )
+
+    val title = if (currentRoute.startsWith("quiz/"))
+        classTitles[hamClass] ?: hamClass
+    else normalTitles[currentRoute] ?: currentRoute
+
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title
+            )
+        },
+        navigationIcon = {
+            if (
+                navController.previousBackStackEntry != null
+                && !topLevel.contains(currentRoute)
+            ) {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        painterResource(R.drawable.outline_arrow_back),
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        },
+        actions = {
+            if (
+                topLevel.contains(currentRoute)
+            ) {
+                IconButton(onClick = { navController.navigate("settings") }) {
+                    Icon(
+                        painterResource(R.drawable.outline_settings),
+                        contentDescription = "Settings"
+                    )
+                }
+            }
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
