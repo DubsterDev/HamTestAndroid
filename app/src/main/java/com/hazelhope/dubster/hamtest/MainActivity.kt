@@ -71,7 +71,7 @@ fun App(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "study"
 
-    val topLevelRoutes = listOf("study", "settings")
+    val topLevelRoutes = listOf("study", "practice", "settings")
 
     LaunchedEffect(navigateTo) {
         if (navigateTo != null) {
@@ -108,6 +108,14 @@ fun App(
                 val quizType = it.arguments?.getString("class") ?: "unknown"
                 Quiz(quizType, db, modifier = newModifier)
             }
+            composable("practice") {
+                Practice(
+                    goToTest = {
+                        navController.navigate("practice/$it")
+                    },
+                    modifier = newModifier
+                )
+            }
             composable("settings") {
                 Settings(modifier = newModifier, settingsDao = settingsDao)
             }
@@ -124,6 +132,7 @@ fun TopBar(topLevel: List<String>, navController: NavController, modifier: Modif
 
     val normalTitles = mapOf(
         "study" to "Study",
+        "practice" to "Practice",
         "settings" to "Settings"
     )
     val classTitles = mapOf(
