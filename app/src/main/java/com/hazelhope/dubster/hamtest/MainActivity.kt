@@ -91,6 +91,8 @@ fun App(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "study"
 
+    val topLevelRoutes = listOf("study", "settings")
+
     LaunchedEffect(navigateTo) {
         if (navigateTo != null) {
             navController.navigate(navigateTo)
@@ -98,15 +100,17 @@ fun App(
     }
     Scaffold(
         topBar = {
-            TopBar(navController)
+            TopBar(topLevelRoutes, navController)
         },
         bottomBar = {
-            BottomBar(
-                currentRoute,
-                { to ->
-                    navController.navigate(to)
-                }
-            )
+            if (topLevelRoutes.contains(currentRoute)) {
+                BottomBar(
+                    currentRoute,
+                    { to ->
+                        navController.navigate(to)
+                    }
+                )
+            }
         },
         modifier = modifier.fillMaxSize()
     ) { innerPadding ->
@@ -133,12 +137,10 @@ fun App(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
+fun TopBar(topLevel: List<String>, navController: NavController, modifier: Modifier = Modifier) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: "study"
     val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
-
-    val topLevel = listOf("study", "settings")
 
     val normalTitles = mapOf(
         "study" to "Study",
