@@ -40,6 +40,48 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 
 @Composable
+fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom,
+        modifier = modifier.fillMaxSize().padding(12.dp)
+    ) {
+        Button(
+            onClick = {
+                goToQuiz("removedtech2022")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Technician (questions removed in 2026)")
+        }
+        Button(
+            onClick = {
+                goToQuiz("technician")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Technician")
+        }
+        Button(
+            onClick = {
+                goToQuiz("general")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("General")
+        }
+        Button(
+            onClick = {
+                goToQuiz("extra")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Extra")
+        }
+    }
+}
+
+@Composable
 fun Quiz(
     quizType: String,
     db: HamTestDatabase,
@@ -312,6 +354,16 @@ fun BreakTheFlow(minutes: Int, onContinue: () -> Unit, modifier: Modifier = Modi
                 text = "Yes, see the next question"
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun StudyPreview() {
+    HamTestTheme {
+        Study(
+            {}
+        )
     }
 }
 
