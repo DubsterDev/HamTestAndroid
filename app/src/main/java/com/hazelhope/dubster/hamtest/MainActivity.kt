@@ -138,7 +138,7 @@ fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
     val currentRoute = navBackStackEntry?.destination?.route ?: "home"
     val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
 
-    val topLevel = listOf("home")
+    val topLevel = listOf("home", "settings")
 
     val normalTitles = mapOf(
         "home" to "Ham Test",
@@ -174,18 +174,7 @@ fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
                 }
             }
         },
-        actions = {
-            if (
-                topLevel.contains(currentRoute)
-            ) {
-                IconButton(onClick = { navController.navigate("settings") }) {
-                    Icon(
-                        painterResource(R.drawable.outline_settings),
-                        contentDescription = "Settings"
-                    )
-                }
-            }
-        },
+        actions = {},
         modifier = modifier
     )
 }
