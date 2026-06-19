@@ -89,7 +89,7 @@ fun App(
     val navController = rememberNavController()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+    val currentRoute = navBackStackEntry?.destination?.route ?: "study"
 
     LaunchedEffect(navigateTo) {
         if (navigateTo != null) {
@@ -113,10 +113,10 @@ fun App(
         val newModifier = Modifier.padding(innerPadding)
         NavHost(
             navController = navController,
-            startDestination = "home"
+            startDestination = "study"
         ) {
-            composable("home") {
-                Home(goToQuiz = {
+            composable("study") {
+                Study(goToQuiz = {
                     navController.navigate("study/$it")
                 }, modifier = newModifier)
             }
@@ -135,13 +135,13 @@ fun App(
 @Composable
 fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+    val currentRoute = navBackStackEntry?.destination?.route ?: "study"
     val hamClass = navBackStackEntry?.arguments?.getString("class") ?: "oops"
 
-    val topLevel = listOf("home", "settings")
+    val topLevel = listOf("study", "settings")
 
     val normalTitles = mapOf(
-        "home" to "Ham Test",
+        "study" to "Study",
         "settings" to "Settings"
     )
     val classTitles = mapOf(
@@ -185,9 +185,9 @@ fun BottomBar(currentRoute: String, navigate: (String) -> Unit, modifier: Modifi
         modifier = modifier
     ) {
         NavigationBarItem(
-            selected = currentRoute == "home",
+            selected = currentRoute == "study",
             onClick = {
-                navigate("home")
+                navigate("study")
             },
             icon = {
                 Icon(
@@ -227,11 +227,11 @@ fun BottomBar(currentRoute: String, navigate: (String) -> Unit, modifier: Modifi
 }
 
 @Composable
-fun Home(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
+fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize().padding(12.dp)
     ) {
         Text(
             text = "Pick a test to begin"
@@ -405,9 +405,9 @@ fun SettingsCard(
 
 @Preview(showBackground = true)
 @Composable
-fun HomePreview() {
+fun StudyPreview() {
     HamTestTheme {
-        Home(
+        Study(
             {}
         )
     }
