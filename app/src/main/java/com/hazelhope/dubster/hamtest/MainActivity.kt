@@ -104,6 +104,7 @@ fun App(
                 "settings" to "Settings"
             )
             val classTitles = mapOf(
+                "removedtech2022" to "Technician (removed in 2026)",
                 "technician" to "Technician Quiz",
                 "general" to "General Quiz",
                 "extra" to "Extra Quiz"
