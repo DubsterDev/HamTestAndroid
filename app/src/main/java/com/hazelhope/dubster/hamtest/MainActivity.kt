@@ -55,9 +55,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val navigateTo = when (intent.action) {
-            "com.hazelhope.dubster.hamtest.OPEN_TECHNICIAN" -> "quiz/technician"
-            "com.hazelhope.dubster.hamtest.OPEN_GENERAL" -> "quiz/general"
-            "com.hazelhope.dubster.hamtest.OPEN_EXTRA" -> "quiz/extra"
+            "com.hazelhope.dubster.hamtest.OPEN_TECHNICIAN" -> "study/technician"
+            "com.hazelhope.dubster.hamtest.OPEN_GENERAL" -> "study/general"
+            "com.hazelhope.dubster.hamtest.OPEN_EXTRA" -> "study/extra"
             else -> null
         }
 
@@ -117,10 +117,10 @@ fun App(
         ) {
             composable("home") {
                 Home(goToQuiz = {
-                    navController.navigate("quiz/$it")
+                    navController.navigate("study/$it")
                 }, modifier = newModifier)
             }
-            composable("quiz/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
+            composable("study/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
                 val quizType = it.arguments?.getString("class") ?: "unknown"
                 Quiz(quizType, db, modifier = newModifier)
             }
@@ -151,7 +151,7 @@ fun TopBar(navController: NavController, modifier: Modifier = Modifier) {
         "extra" to "Extra Quiz"
     )
 
-    val title = if (currentRoute.startsWith("quiz/"))
+    val title = if (currentRoute.startsWith("study/"))
         classTitles[hamClass] ?: hamClass
     else normalTitles[currentRoute] ?: currentRoute
 
