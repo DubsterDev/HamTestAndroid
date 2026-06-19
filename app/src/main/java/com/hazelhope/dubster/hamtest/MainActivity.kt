@@ -301,7 +301,7 @@ fun Settings(
         verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         Text(
-            text = "Quiz Behavior",
+            text = "Study Mode",
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(6.dp)
