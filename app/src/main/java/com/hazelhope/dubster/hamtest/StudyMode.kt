@@ -86,7 +86,7 @@ fun Quiz(
     quizType: String,
     db: HamTestDatabase,
     modifier: Modifier = Modifier,
-    viewModel: HamTestViewModel = viewModel()
+    viewModel: StudyModeViewModel = viewModel()
 ) {
     LaunchedEffect(db) {
         viewModel.setDatabase(db)

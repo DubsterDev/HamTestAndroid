@@ -15,7 +15,7 @@ import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
-class HamTestViewModel(application: Application) : AndroidViewModel(application) {
+class StudyModeViewModel(application: Application) : AndroidViewModel(application) {
     private var _db: HamTestDatabase? = null
 
     private val _placeholderQuestion = HamQuestion(
