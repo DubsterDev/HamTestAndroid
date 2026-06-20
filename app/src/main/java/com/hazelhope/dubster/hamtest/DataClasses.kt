@@ -14,6 +14,7 @@ data class HamQuestion(
     val answers: List<String>,
     val figure: String,
     @SerialName("correct_letter") val correctLetter: String,
+    val explanation: String? = null,
     val userQuestionInfo: UserQuestionInfo? = null
 )
 
