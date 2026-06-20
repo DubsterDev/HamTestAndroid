@@ -89,6 +89,12 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
         _currentQuestion.update {
             _generatedQuiz[_currentQuestionNumber]
         }
+
+        _liveData.update {
+            it.copy(
+                questionsToGo = (_generatedQuiz.size - 1) - _currentQuestionNumber
+            )
+        }
     }
 
     fun setAnswer(answer: Int) {
