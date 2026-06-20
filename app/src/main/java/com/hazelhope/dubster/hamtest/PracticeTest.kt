@@ -101,6 +101,12 @@ fun PracticeTest(
             modifier = Modifier.verticalScroll(scrollState).weight(1f),
             hideIdentifier = true
         )
+        if (liveData.testComplete) {
+            QuestionPoolSuccessCard(
+                currentQuestion.hamQuestion.correct == currentQuestion.selectedAnswer,
+                currentQuestion.hamQuestion.correct_letter,
+            )
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
