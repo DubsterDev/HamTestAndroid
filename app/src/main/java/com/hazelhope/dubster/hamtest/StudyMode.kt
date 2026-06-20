@@ -206,7 +206,6 @@ fun QuestionPoolJustQuestion(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .fillMaxSize()
     ) {
         if (currentQuestion.figure != "") {
             Image(
