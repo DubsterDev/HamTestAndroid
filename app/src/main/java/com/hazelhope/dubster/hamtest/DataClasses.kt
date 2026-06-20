@@ -17,6 +17,12 @@ data class HamQuestion(
 )
 
 @Serializable
+data class PracticeTestQuestion(
+    val hamQuestion: HamQuestion,
+    val selectedAnswer: Int
+)
+
+@Serializable
 data class QuestionPoolLiveData(
     val totalPoolSize: Int,
     val inUsePoolSize: Int,

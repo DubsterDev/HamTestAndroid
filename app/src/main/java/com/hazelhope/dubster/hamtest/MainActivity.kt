@@ -116,6 +116,10 @@ fun App(
                     modifier = newModifier
                 )
             }
+            composable("practice/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
+                val quizType = it.arguments?.getString("class") ?: "unknown"
+                PracticeTest(quizType, modifier = newModifier)
+            }
             composable("settings") {
                 Settings(modifier = newModifier, settingsDao = settingsDao)
             }
@@ -142,7 +146,7 @@ fun TopBar(topLevel: List<String>, navController: NavController, modifier: Modif
         "extra" to "Extra Quiz"
     )
 
-    val title = if (currentRoute.startsWith("study/"))
+    val title = if (currentRoute.startsWith("study/") || currentRoute.startsWith("practice/"))
         classTitles[hamClass] ?: hamClass
     else normalTitles[currentRoute] ?: currentRoute
 
