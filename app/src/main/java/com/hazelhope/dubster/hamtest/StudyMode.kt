@@ -121,7 +121,8 @@ fun Quiz(
             QuestionPoolDiagnostics(questionPoolData)
             QuestionPoolQuestion(currentQuestion, {
                 viewModel.nextQuestion(it)
-            })
+            },
+                modifier = Modifier.weight(1f))
         }
     }
 }
@@ -157,15 +158,14 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .verticalScroll(scrollState)
             .fillMaxSize()
     ) {
         QuestionPoolJustQuestion(
             currentQuestion = currentQuestion,
             selectedAnswer = selectedAnswer,
             onSelect = { selectedAnswer = it },
-            enabled = !checked,
-            modifier = Modifier
-                .verticalScroll(scrollState)
+            enabled = !checked
         )
 
         AnimatedVisibility(checked) {
