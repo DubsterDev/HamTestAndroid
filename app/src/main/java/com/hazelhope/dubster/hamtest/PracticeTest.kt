@@ -31,13 +31,35 @@ fun Practice(
     goToTest: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button({
-        goToTest("general")
-    },
-        modifier = modifier) {
-        Text(
-            text = "General"
-        )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom,
+        modifier = modifier.fillMaxSize().padding(12.dp)
+    ) {
+        Button(
+            onClick = {
+                goToTest("technician")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Technician")
+        }
+        Button(
+            onClick = {
+                goToTest("general")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("General")
+        }
+        Button(
+            onClick = {
+                goToTest("extra")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Extra")
+        }
     }
 }
 
