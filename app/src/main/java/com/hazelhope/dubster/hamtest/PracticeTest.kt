@@ -64,7 +64,8 @@ fun PracticeTest(
                 viewModel.setAnswer(it)
             },
             enabled = true,
-            modifier = Modifier.verticalScroll(scrollState).weight(1f)
+            modifier = Modifier.verticalScroll(scrollState).weight(1f),
+            hideIdentifier = true
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,

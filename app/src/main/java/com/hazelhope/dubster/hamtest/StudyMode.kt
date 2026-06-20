@@ -200,7 +200,8 @@ fun QuestionPoolJustQuestion(
     selectedAnswer: Int,
     onSelect: (Int) -> Unit,
     enabled: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hideIdentifier: Boolean = false
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
@@ -221,11 +222,13 @@ fun QuestionPoolJustQuestion(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = currentQuestion.id,
-                textAlign = TextAlign.Left,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (!hideIdentifier) {
+                Text(
+                    text = currentQuestion.id,
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             val firstTime = currentQuestion.userQuestionInfo?.firstTime == true
             val weakQuestion =
