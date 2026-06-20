@@ -78,6 +78,10 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
         }
 
         _generatedQuiz.shuffle()
+
+        _currentQuestion.update {
+            _generatedQuiz[_currentQuestionNumber]
+        }
     }
 
     fun setAnswer(answer: Int) {
