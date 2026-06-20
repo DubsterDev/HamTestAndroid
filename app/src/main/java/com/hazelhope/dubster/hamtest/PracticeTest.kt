@@ -127,7 +127,7 @@ fun PracticeTest(
         if (liveData.testComplete) {
             QuestionPoolSuccessCard(
                 currentQuestion.hamQuestion.correct == currentQuestion.selectedAnswer,
-                currentQuestion.hamQuestion.correct_letter,
+                currentQuestion.hamQuestion.correctLetter,
             )
         }
         Row(

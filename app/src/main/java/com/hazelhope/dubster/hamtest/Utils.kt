@@ -13,6 +13,6 @@ fun shuffleHamQuestion(hamQuestion: HamQuestion, autoSelectCorrectAnswer: Boolea
     return hamQuestion.copy(
         answers = shuffledAnswers,
         correct = newCorrectAnswer,
-        correct_letter = newCorrectAnswerLetter
+        correctLetter = newCorrectAnswerLetter
     )
 }

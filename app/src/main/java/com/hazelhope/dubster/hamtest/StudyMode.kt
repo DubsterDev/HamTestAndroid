@@ -175,7 +175,7 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
         Button({
             if (!checked) {
                 revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
-                revealedCorrectLetter = currentQuestion.correct_letter
+                revealedCorrectLetter = currentQuestion.correctLetter
                 checked = true
             } else {
                 nextQuestion(!revealedIsCheckedCorrect)

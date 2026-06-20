@@ -22,7 +22,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
             question = "Does this take a while to load?",
             answers = listOf("No", "Absolutely not", "Yes", "Of course"),
             figure = "",
-            correct_letter = "A"
+            correctLetter = "A"
         )
     )
 

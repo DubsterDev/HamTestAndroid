@@ -2,6 +2,7 @@ package com.hazelhope.dubster.hamtest
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,7 +13,7 @@ data class HamQuestion(
     val question: String,
     val answers: List<String>,
     val figure: String,
-    val correct_letter: String,
+    @SerialName("correct_letter") val correctLetter: String,
     val userQuestionInfo: UserQuestionInfo? = null
 )
 
