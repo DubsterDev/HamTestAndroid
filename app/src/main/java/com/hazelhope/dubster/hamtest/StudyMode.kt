@@ -158,11 +158,61 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
+    ) {
+        QuestionPoolJustQuestion(
+            currentQuestion = currentQuestion,
+            selectedAnswer = selectedAnswer,
+            onSelect = { selectedAnswer = it },
+            enabled = !checked,
+            modifier = Modifier
+                .verticalScroll(scrollState)
+        )
+
+        AnimatedVisibility(checked) {
+            QuestionPoolSuccessCard(revealedIsCheckedCorrect, revealedCorrectLetter)
+        }
+
+        Button({
+            if (!checked) {
+                revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
+                revealedCorrectLetter = currentQuestion.correct_letter
+                checked = true
+            } else {
+                nextQuestion(!revealedIsCheckedCorrect)
+                checked = false
+                selectedAnswer = 0
+            }
+        },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+        ) {
+            Text(
+                text = if (checked) "Next Question" else "Submit"
+            )
+        }
+    }
+}
+
+@Composable
+fun QuestionPoolJustQuestion(
+    currentQuestion: HamQuestion,
+    selectedAnswer: Int,
+    onSelect: (Int) -> Unit,
+    enabled: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
     ) {
         if (currentQuestion.figure != "") {
             Image(
-                painterResource(figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel),
+                painterResource(
+                    figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel
+                ),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -179,8 +229,9 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
             )
 
             val firstTime = currentQuestion.userQuestionInfo?.firstTime == true
-            val weakQuestion = if (currentQuestion.userQuestionInfo != null) currentQuestion.userQuestionInfo.score < 0
-            else false
+            val weakQuestion =
+                if (currentQuestion.userQuestionInfo != null) currentQuestion.userQuestionInfo.score < 0
+                else false
 
             if (firstTime || weakQuestion) {
                 Row(
@@ -208,41 +259,17 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.selectableGroup()
         ) {
-            val letters = listOf("A", "B" , "C", "D")
+            val letters = listOf("A", "B", "C", "D")
             currentQuestion.answers.forEachIndexed { index, answer ->
                 QuestionPoolAnswer(
                     answer = "${letters[index]}. $answer",
                     selected = index == selectedAnswer,
-                    enabled = !checked,
+                    enabled = enabled,
                     onSelect = {
-                        selectedAnswer = index
+                        onSelect(index)
                     }
                 )
             }
-        }
-
-        AnimatedVisibility(checked) {
-            QuestionPoolSuccessCard(revealedIsCheckedCorrect, revealedCorrectLetter)
-        }
-
-        Button({
-            if (!checked) {
-                revealedIsCheckedCorrect = selectedAnswer == currentQuestion.correct
-                revealedCorrectLetter = currentQuestion.correct_letter
-                checked = true
-            } else {
-                nextQuestion(!revealedIsCheckedCorrect)
-                checked = false
-                selectedAnswer = 0
-            }
-        },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-        ) {
-            Text(
-                text = if (checked) "Next Question" else "Submit"
-            )
         }
     }
 }
