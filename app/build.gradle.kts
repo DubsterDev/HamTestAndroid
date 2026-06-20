@@ -17,8 +17,8 @@ android {
         applicationId = "com.hazelhope.dubster.hamtest"
         minSdk = 25
         targetSdk = 37
-        versionCode = 107
-        versionName = "1.0.7"
+        versionCode = 110
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
