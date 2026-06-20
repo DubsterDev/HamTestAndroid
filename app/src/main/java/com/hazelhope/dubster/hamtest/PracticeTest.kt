@@ -50,6 +50,7 @@ fun PracticeTest(
     }
 
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
+    val atLastQuestion by viewModel.atLastQuestion.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
@@ -85,14 +86,25 @@ fun PracticeTest(
             }
             IconButton(
                 onClick = {
-                    viewModel.changeQuestion("next")
+                    if (!atLastQuestion) {
+                        viewModel.changeQuestion("next")
+                    } else {
+                        viewModel.finishAndGrade()
+                    }
                 },
                 modifier = Modifier.weight(1f)
             ) {
-                Icon(
-                    painterResource(R.drawable.outline_arrow_forward),
-                    contentDescription = "Next question"
-                )
+                if (!atLastQuestion) {
+                    Icon(
+                        painterResource(R.drawable.outline_arrow_forward),
+                        contentDescription = "Next question"
+                    )
+                } else {
+                    Icon(
+                        painterResource(R.drawable.outline_check),
+                        contentDescription = "Finish test"
+                    )
+                }
             }
         }
     }

@@ -37,6 +37,9 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
     private val _currentQuestion = MutableStateFlow(_placeholderQuestion)
     val currentQuestion: StateFlow<PracticeTestQuestion> = _currentQuestion.asStateFlow()
 
+    private val _atLastQuestion = MutableStateFlow(false)
+    val atLastQuestion: StateFlow<Boolean> = _atLastQuestion.asStateFlow()
+
     private var _currentQuestionNumber = 0
 
     fun loadQuiz(quizType: String) {
@@ -106,6 +109,10 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
 
         _currentQuestion.update {
             _generatedQuiz[_currentQuestionNumber]
+        }
+
+        if (_currentQuestionNumber == _generatedQuiz.size - 1) {
+            _atLastQuestion.update { true }
         }
     }
 
