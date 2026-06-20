@@ -24,6 +24,7 @@ data class PracticeTestQuestion(
 
 @Serializable
 data class PracticeTestLiveData(
+    val currentQuestionNumber: Int,
     val questionsToGo: Int,
     val testComplete: Boolean,
     val finalScore: Int

@@ -38,6 +38,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
     val currentQuestion: StateFlow<PracticeTestQuestion> = _currentQuestion.asStateFlow()
 
     private val _liveData = MutableStateFlow(PracticeTestLiveData(
+        currentQuestionNumber = 0,
         questionsToGo = 300,
         testComplete = false,
         finalScore = 900
@@ -92,6 +93,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
 
         _liveData.update {
             it.copy(
+                currentQuestionNumber = _currentQuestionNumber,
                 questionsToGo = (_generatedQuiz.size - 1) - _currentQuestionNumber
             )
         }
@@ -123,6 +125,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
 
         _liveData.update {
             it.copy(
+                currentQuestionNumber = _currentQuestionNumber,
                 questionsToGo = (_generatedQuiz.size - 1) - _currentQuestionNumber
             )
         }

@@ -139,7 +139,8 @@ fun PracticeTest(
                 onClick = {
                     viewModel.changeQuestion("previous")
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = liveData.currentQuestionNumber != 0
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -162,7 +163,8 @@ fun PracticeTest(
                         viewModel.finishAndGrade()
                     }
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = liveData.questionsToGo > 0 || !liveData.testComplete
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
