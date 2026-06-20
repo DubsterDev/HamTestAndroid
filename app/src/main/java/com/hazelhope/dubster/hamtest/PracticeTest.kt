@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,6 +51,8 @@ fun PracticeTest(
 
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier.fillMaxSize().padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
@@ -59,7 +63,8 @@ fun PracticeTest(
             onSelect = {
                 viewModel.setAnswer(it)
             },
-            enabled = true
+            enabled = true,
+            modifier = Modifier.verticalScroll(scrollState).weight(1f)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
