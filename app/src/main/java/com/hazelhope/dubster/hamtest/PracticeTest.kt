@@ -12,9 +12,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -135,18 +135,26 @@ fun PracticeTest(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            IconButton(
+            TextButton(
                 onClick = {
                     viewModel.changeQuestion("previous")
                 },
                 modifier = Modifier.weight(1f)
             ) {
-                Icon(
-                    painterResource(R.drawable.outline_arrow_back),
-                    contentDescription = "Previous question"
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)
+                ) {
+                    Icon(
+                        painterResource(R.drawable.outline_arrow_back),
+                        contentDescription = "Previous question"
+                    )
+                    Text(
+                        text = "Previous"
+                    )
+                }
             }
-            IconButton(
+            TextButton(
                 onClick = {
                     if (liveData.questionsToGo > 0) {
                         viewModel.changeQuestion("next")
@@ -156,16 +164,27 @@ fun PracticeTest(
                 },
                 modifier = Modifier.weight(1f)
             ) {
-                if (liveData.questionsToGo > 0) {
-                    Icon(
-                        painterResource(R.drawable.outline_arrow_forward),
-                        contentDescription = "Next question"
-                    )
-                } else {
-                    Icon(
-                        painterResource(R.drawable.outline_check),
-                        contentDescription = "Finish test"
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)
+                ) {
+                    if (liveData.questionsToGo > 0) {
+                        Text(
+                            text = "Next"
+                        )
+                        Icon(
+                            painterResource(R.drawable.outline_arrow_forward),
+                            contentDescription = "Next question"
+                        )
+                    } else {
+                        Icon(
+                            painterResource(R.drawable.outline_check),
+                            contentDescription = "Finish test"
+                        )
+                        Text(
+                            text = "Finish"
+                        )
+                    }
                 }
             }
         }
