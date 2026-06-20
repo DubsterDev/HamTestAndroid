@@ -11,6 +11,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,7 +52,7 @@ fun PracticeTest(
     }
 
     val currentQuestion by viewModel.currentQuestion.collectAsStateWithLifecycle()
-    val atLastQuestion by viewModel.atLastQuestion.collectAsStateWithLifecycle()
+    val liveData by viewModel.liveData.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
@@ -58,6 +60,12 @@ fun PracticeTest(
         modifier = modifier.fillMaxSize().padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
     ) {
+        Text(
+            text = "${liveData.questionsToGo} remaining",
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth()
+        )
         QuestionPoolJustQuestion(
             currentQuestion = currentQuestion.hamQuestion,
             selectedAnswer = currentQuestion.selectedAnswer,
@@ -86,7 +94,7 @@ fun PracticeTest(
             }
             IconButton(
                 onClick = {
-                    if (!atLastQuestion) {
+                    if (liveData.questionsToGo > 0) {
                         viewModel.changeQuestion("next")
                     } else {
                         viewModel.finishAndGrade()
@@ -94,7 +102,7 @@ fun PracticeTest(
                 },
                 modifier = Modifier.weight(1f)
             ) {
-                if (!atLastQuestion) {
+                if (liveData.questionsToGo > 0) {
                     Icon(
                         painterResource(R.drawable.outline_arrow_forward),
                         contentDescription = "Next question"

@@ -23,6 +23,13 @@ data class PracticeTestQuestion(
 )
 
 @Serializable
+data class PracticeTestLiveData(
+    val questionsToGo: Int,
+    val testComplete: Boolean,
+    val finalScore: Int
+)
+
+@Serializable
 data class QuestionPoolLiveData(
     val totalPoolSize: Int,
     val inUsePoolSize: Int,
