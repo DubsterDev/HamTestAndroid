@@ -61,7 +61,10 @@ fun PracticeTest(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)
     ) {
         Text(
-            text = "${liveData.questionsToGo} remaining",
+            text = if (liveData.testComplete && liveData.finalScore >= 74)
+                "You passed, with a score of ${liveData.finalScore}%"
+            else if (liveData.testComplete) "You failed, with a score of ${liveData.finalScore}%"
+            else "${liveData.questionsToGo} remaining",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.fillMaxWidth()
@@ -72,7 +75,7 @@ fun PracticeTest(
             onSelect = {
                 viewModel.setAnswer(it)
             },
-            enabled = true,
+            enabled = !liveData.testComplete,
             modifier = Modifier.verticalScroll(scrollState).weight(1f),
             hideIdentifier = true
         )
