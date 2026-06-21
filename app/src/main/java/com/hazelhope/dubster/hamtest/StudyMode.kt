@@ -409,7 +409,7 @@ fun QuestionPoolQuestionPreview() {
                 listOf("Yes", "Of course", "No, the FCC rules prohibit it from looking cool", "The ARRL bylaws prevent ham software from looking new"),
                 "",
                 "C",
-                UserQuestionInfo(
+                userQuestionInfo = UserQuestionInfo(
                     "PREVIEW",
                     "preview",
                     -2,
