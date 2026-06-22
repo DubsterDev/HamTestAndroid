@@ -44,7 +44,7 @@ fun Practice(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Technician")
+            Text("Technician Test")
         }
         Button(
             onClick = {
@@ -52,7 +52,7 @@ fun Practice(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("General")
+            Text("General Test")
         }
         Button(
             onClick = {
@@ -60,7 +60,7 @@ fun Practice(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Extra")
+            Text("Extra Test")
         }
     }
 }

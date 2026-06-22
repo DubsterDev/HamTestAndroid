@@ -139,16 +139,24 @@ fun TopBar(topLevel: List<String>, navController: NavController, modifier: Modif
         "practice" to "Practice",
         "settings" to "Settings"
     )
-    val classTitles = mapOf(
-        "removedtech2022" to "Technician (removed in 2026)",
+    val studyTitles = mapOf(
+        "removedtech2022" to "Technician Quiz (removed in 2026)",
         "technician" to "Technician Quiz",
         "general" to "General Quiz",
         "extra" to "Extra Quiz"
     )
 
-    val title = if (currentRoute.startsWith("study/") || currentRoute.startsWith("practice/"))
-        classTitles[hamClass] ?: hamClass
-    else normalTitles[currentRoute] ?: currentRoute
+    val testTitles = mapOf(
+        "technician" to "Technician Test",
+        "general" to "General Test",
+        "extra" to "Extra Test"
+    )
+
+    val title = when {
+        currentRoute.startsWith("study/") -> studyTitles[hamClass] ?: hamClass
+        currentRoute.startsWith("practice/") -> testTitles[hamClass] ?: hamClass
+        else -> normalTitles[currentRoute] ?: currentRoute
+    }
 
     CenterAlignedTopAppBar(
         title = {
