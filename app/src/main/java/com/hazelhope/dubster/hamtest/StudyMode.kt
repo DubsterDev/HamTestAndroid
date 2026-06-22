@@ -41,43 +41,43 @@ import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 
 @Composable
 fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
+    val scrollState = rememberScrollState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom,
-        modifier = modifier.fillMaxSize().padding(12.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Bottom),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
+            .verticalScroll(scrollState)
     ) {
-        Button(
+        PickAQuizCard(
+            title = "Technician (removed in 2026)",
+            description = "Only contains the 28 questions removed in 2026",
             onClick = {
                 goToQuiz("removedtech2022")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Technician (questions removed in 2026)")
-        }
-        Button(
+            }
+        )
+        PickAQuizCard(
+            title = "Technician",
+            description = "Study for the 2026-2030 question pool",
             onClick = {
                 goToQuiz("technician")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Technician")
-        }
-        Button(
+            }
+        )
+        PickAQuizCard(
+            title = "General",
+            description = "Study for the 2023-2027 question pool",
             onClick = {
                 goToQuiz("general")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("General")
-        }
-        Button(
+            }
+        )
+        PickAQuizCard(
+            title = "Amateur Extra",
+            description = "Study for the 2024-2028 question pool",
             onClick = {
                 goToQuiz("extra")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Extra")
-        }
+            }
+        )
     }
 }
 
