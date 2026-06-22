@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,35 +32,36 @@ fun Practice(
     goToTest: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom,
-        modifier = modifier.fillMaxSize().padding(12.dp)
+        verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Bottom),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp)
+            .verticalScroll(scrollState)
     ) {
-        Button(
+        PickAQuizCard(
+            title = "Technician Test",
+            description = "Take a practice test for the 2026-2030 question pool",
             onClick = {
                 goToTest("technician")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Technician Test")
-        }
-        Button(
+            }
+        )
+        PickAQuizCard(
+            title = "General Test",
+            description = "Take a practice test for the 2023-2027 question pool",
             onClick = {
                 goToTest("general")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("General Test")
-        }
-        Button(
+            }
+        )
+        PickAQuizCard(
+            title = "Extra Test",
+            description = "Take a practice test for the 2024-2028 question pool",
             onClick = {
                 goToTest("extra")
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Extra Test")
-        }
+            }
+        )
     }
 }
 

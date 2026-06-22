@@ -58,21 +58,21 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
             }
         )
         PickAQuizCard(
-            title = "Technician",
+            title = "Technician Questions",
             description = "Study for the 2026-2030 question pool",
             onClick = {
                 goToQuiz("technician")
             }
         )
         PickAQuizCard(
-            title = "General",
+            title = "General Questions",
             description = "Study for the 2023-2027 question pool",
             onClick = {
                 goToQuiz("general")
             }
         )
         PickAQuizCard(
-            title = "Amateur Extra",
+            title = "Extra Questions",
             description = "Study for the 2024-2028 question pool",
             onClick = {
                 goToQuiz("extra")
