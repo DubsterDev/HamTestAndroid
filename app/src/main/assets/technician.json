@@ -1159,7 +1159,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation":  "Repeaters transmit on one frequency, and listen on another. The difference between these frequencies is the offset. Unless you have your radio set up for the repeater, you'll likely won't have an offset configured.\n\nSome newer radios automatically set the offset, but they won't know what the tone is that needs to be transmitted. You'll have to look it up on something like Repeaterbook to find out what your local repeater's tone is."
   },
   {
     "id": "T2B05",
@@ -1215,7 +1216,8 @@
       "Use subaudible tones so both stations can share the frequency"
     ],
     "figure": "",
-    "correct_letter": "A"
+    "correct_letter": "A",
+    "explanation": "Since no one has priority access to a frequency, both interfering stations must decide who should move in a mutually acceptable manner."
   },
   {
     "id": "T2B09",
@@ -1229,7 +1231,8 @@
       "So stations with simple transmitters can access the repeater without automated offset"
     ],
     "figure": "",
-    "correct_letter": "A"
+    "correct_letter": "A",
+    "explanation": "Unlike using repeaters, simplex communication is basically direct communication with another operator. To use simplex, you can set both of the radios to the same frequency."
   },
   {
     "id": "T2B10",
@@ -1285,7 +1288,8 @@
       "Reduce interference from impulse noise"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "Squelch is a method of eliminating static noise, only turning on the speaker if the received signal is higher than the configured noise level."
   },
   {
     "id": "T2B14",
