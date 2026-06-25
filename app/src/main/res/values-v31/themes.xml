@@ -2,6 +2,6 @@
 <resources>
 
     <style name="Theme.HamTest" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/ic_launcher_background</item>
+        <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
 </resources>
