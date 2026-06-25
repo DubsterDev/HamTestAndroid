@@ -122,7 +122,8 @@ fun PracticeTest(
             },
             enabled = !liveData.testComplete,
             modifier = Modifier.verticalScroll(scrollState).weight(1f),
-            hideIdentifier = !liveData.testComplete
+            hideIdentifier = !liveData.testComplete,
+            showInfoButton = currentQuestion.hamQuestion.explanation != null && liveData.testComplete
         )
         if (liveData.testComplete) {
             QuestionPoolSuccessCard(
