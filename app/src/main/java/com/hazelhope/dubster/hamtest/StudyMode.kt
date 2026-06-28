@@ -159,7 +159,7 @@ fun QuestionPoolDiagnostics(questionPoolData: QuestionPoolLiveData, modifier: Mo
 fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     var checked by remember { mutableStateOf(false) }
 
-    var selectedAnswer by remember { mutableIntStateOf(0) }
+    var selectedAnswer by remember { mutableIntStateOf(-1) }
 
     var revealedIsCheckedCorrect by remember { mutableStateOf(false) }
     var revealedCorrectLetter by remember { mutableStateOf("") }
@@ -193,12 +193,13 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
             } else {
                 nextQuestion(!revealedIsCheckedCorrect)
                 checked = false
-                selectedAnswer = 0
+                selectedAnswer = -1
             }
         },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
+                .padding(top = 20.dp),
+            enabled = selectedAnswer != -1
         ) {
             Text(
                 text = if (checked) "Next Question" else "Submit"
