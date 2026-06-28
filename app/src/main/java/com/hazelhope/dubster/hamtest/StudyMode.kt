@@ -25,6 +25,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -38,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
@@ -46,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
+import com.hazelhope.dubster.hamtest.ui.theme.extendedColors
 import kotlinx.coroutines.launch
 
 @Composable
@@ -338,6 +342,7 @@ fun QuestionPoolJustQuestion(
                     answer = "${letters[index]}. $answer",
                     selected = index == selectedAnswer,
                     enabled = enabled,
+                    correct = !enabled && index == currentQuestion.correct,
                     onSelect = {
                         onSelect(index)
                     }
@@ -352,9 +357,11 @@ fun QuestionPoolAnswer(
     answer: String,
     selected: Boolean,
     enabled: Boolean,
+    correct: Boolean,
     onSelect: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val green = MaterialTheme.extendedColors.success
     Row(
         modifier
             .fillMaxWidth()
@@ -369,12 +376,19 @@ fun QuestionPoolAnswer(
     ) {
         RadioButton(
             selected = selected,
-            onClick = null
+            onClick = null,
+            colors = if (correct) RadioButtonColors(
+                selectedColor = green,
+                unselectedColor = green,
+                disabledSelectedColor = green,
+                disabledUnselectedColor = green
+            ) else RadioButtonDefaults.colors()
         )
         Text(
             text = answer,
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier.padding(start = 16.dp),
+            color = if (correct) green else Color.Unspecified
         )
     }
 }
