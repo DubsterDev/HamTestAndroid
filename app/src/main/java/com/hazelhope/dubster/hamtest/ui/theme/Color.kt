@@ -12,3 +12,9 @@ val Pink40 = Color(0xFF7D5260)
 
 val successLight = Color(0xFF2E7D32)
 val successDark = Color(0xFF4CAF50)
+
+val successContainerLight = Color(0xFFA5D6A7)
+val successContainerDark = Color(0xFF1D3F1E)
+
+val onSuccessContainerLight = Color(0xFF113B14)
+val onSuccessContainerDark = Color(0xFFC8E6C9)

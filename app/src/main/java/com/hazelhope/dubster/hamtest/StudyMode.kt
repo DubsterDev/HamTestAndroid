@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -395,19 +396,31 @@ fun QuestionPoolAnswer(
 
 @Composable
 fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
+    val container = if (isCorrect) MaterialTheme.extendedColors.successContainer
+                    else MaterialTheme.colorScheme.errorContainer
+    val onContainer = if (isCorrect) MaterialTheme.extendedColors.onSuccessContainer
+                        else MaterialTheme.colorScheme.onErrorContainer
     Card(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        colors = CardColors(
+            containerColor = container,
+            contentColor = onContainer,
+            disabledContainerColor = container,
+            disabledContentColor = onContainer
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            Image(
+            Icon(
                 if (isCorrect) painterResource(R.drawable.outline_check_circle)
                 else painterResource(R.drawable.outline_cancel),
-                contentDescription = null
+                contentDescription = null,
+                tint = if (isCorrect) MaterialTheme.extendedColors.success
+                else MaterialTheme.colorScheme.error
             )
             Column(
                 modifier = Modifier

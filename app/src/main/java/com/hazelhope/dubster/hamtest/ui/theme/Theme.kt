@@ -39,12 +39,16 @@ private val LightColorScheme = lightColorScheme(
 
 @Immutable
 data class ExtendedColors(
-    val success: Color
+    val success: Color,
+    val successContainer: Color,
+    val onSuccessContainer: Color
 )
 
 private val LocalExtendedColors = staticCompositionLocalOf {
     ExtendedColors(
-        success = Color.Unspecified
+        success = Color.Unspecified,
+        successContainer = Color.Unspecified,
+        onSuccessContainer = Color.Unspecified
     )
 }
 
@@ -73,11 +77,15 @@ fun HamTestTheme(
     val extendedColors =
         if (darkTheme) {
             ExtendedColors(
-                success = successDark
+                success = successDark,
+                successContainer = successContainerDark,
+                onSuccessContainer = onSuccessContainerDark
             )
         } else {
             ExtendedColors(
-                success = successLight
+                success = successLight,
+                successContainer = successContainerLight,
+                onSuccessContainer = onSuccessContainerLight
             )
         }
 
