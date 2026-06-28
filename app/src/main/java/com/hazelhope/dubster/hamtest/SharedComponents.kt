@@ -64,7 +64,7 @@ fun PickAQuizCard(
 }
 
 @Composable
-fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
+fun SuccessCard(isCorrect: Boolean, title: String, description: String, modifier: Modifier = Modifier) {
     val container = if (isCorrect) MaterialTheme.extendedColors.successContainer
     else MaterialTheme.colorScheme.errorContainer
     val onContainer = if (isCorrect) MaterialTheme.extendedColors.onSuccessContainer
@@ -96,16 +96,26 @@ fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier:
                     .padding(start = 12.dp)
             ) {
                 Text(
-                    text = if (isCorrect) "Correct!" else "Wrong.",
+                    text = title,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = if (isCorrect) "That was the right answer."
-                    else "The right answer was $correctLetter"
+                    text = description
                 )
             }
         }
     }
+}
+
+@Composable
+fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
+    SuccessCard(
+        isCorrect = isCorrect,
+        title = if (isCorrect) "Correct!" else "Wrong.",
+        description = if (isCorrect) "That was the right answer."
+                        else "The right answer was $correctLetter",
+        modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)

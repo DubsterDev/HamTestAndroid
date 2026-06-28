@@ -1,13 +1,11 @@
 package com.hazelhope.dubster.hamtest
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -87,25 +85,11 @@ fun PracticeTest(
     ) {
         if (liveData.testComplete) {
             val passed = liveData.finalScore >= 74
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-                modifier = Modifier.fillMaxSize().weight(1f)
-            ) {
-                Image(
-                    painterResource(if (passed) R.drawable.outline_check_circle
-                    else R.drawable.outline_cancel),
-                    contentDescription = null,
-                    modifier = Modifier.size(128.dp)
-                )
-                Text(
-                    text = if (passed) "You passed!" else "You failed.",
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = "You got ${liveData.finalScore}%"
-                )
-            }
+            SuccessCard(
+                isCorrect = passed,
+                title = if (passed) "You passed!" else "You failed.",
+                description = "You got ${liveData.finalScore}%"
+            )
         } else {
             Text(
                 text = "${liveData.questionsToGo} remaining",
