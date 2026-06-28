@@ -17,8 +17,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -395,51 +393,6 @@ fun QuestionPoolAnswer(
 }
 
 @Composable
-fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
-    val container = if (isCorrect) MaterialTheme.extendedColors.successContainer
-                    else MaterialTheme.colorScheme.errorContainer
-    val onContainer = if (isCorrect) MaterialTheme.extendedColors.onSuccessContainer
-                        else MaterialTheme.colorScheme.onErrorContainer
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        colors = CardColors(
-            containerColor = container,
-            contentColor = onContainer,
-            disabledContainerColor = container,
-            disabledContentColor = onContainer
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-        ) {
-            Icon(
-                if (isCorrect) painterResource(R.drawable.outline_check_circle)
-                else painterResource(R.drawable.outline_cancel),
-                contentDescription = null,
-                tint = if (isCorrect) MaterialTheme.extendedColors.success
-                else MaterialTheme.colorScheme.error
-            )
-            Column(
-                modifier = Modifier
-                    .padding(start = 12.dp)
-            ) {
-                Text(
-                    text = if (isCorrect) "Correct!" else "Wrong.",
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Text(
-                    text = if (isCorrect) "That was the right answer."
-                    else "The right answer was $correctLetter"
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun BreakTheFlow(minutes: Int, onContinue: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
@@ -531,28 +484,6 @@ fun QuestionPoolDiagnosticsPreview() {
                 2,
                 0
             )
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun QuestionPoolSuccessCardCorrectPreview() {
-    HamTestTheme {
-        QuestionPoolSuccessCard(
-            true,
-            "C"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun QuestionPoolSuccessCardWrongPreview() {
-    HamTestTheme {
-        QuestionPoolSuccessCard(
-            false,
-            "C"
         )
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
+import com.hazelhope.dubster.hamtest.ui.theme.extendedColors
 
 @Composable
 fun PickAQuizCard(
@@ -62,6 +63,51 @@ fun PickAQuizCard(
     }
 }
 
+@Composable
+fun QuestionPoolSuccessCard(isCorrect: Boolean, correctLetter: String, modifier: Modifier = Modifier) {
+    val container = if (isCorrect) MaterialTheme.extendedColors.successContainer
+    else MaterialTheme.colorScheme.errorContainer
+    val onContainer = if (isCorrect) MaterialTheme.extendedColors.onSuccessContainer
+    else MaterialTheme.colorScheme.onErrorContainer
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardColors(
+            containerColor = container,
+            contentColor = onContainer,
+            disabledContainerColor = container,
+            disabledContentColor = onContainer
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
+            Icon(
+                if (isCorrect) painterResource(R.drawable.outline_check_circle)
+                else painterResource(R.drawable.outline_cancel),
+                contentDescription = null,
+                tint = if (isCorrect) MaterialTheme.extendedColors.success
+                else MaterialTheme.colorScheme.error
+            )
+            Column(
+                modifier = Modifier
+                    .padding(start = 12.dp)
+            ) {
+                Text(
+                    text = if (isCorrect) "Correct!" else "Wrong.",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = if (isCorrect) "That was the right answer."
+                    else "The right answer was $correctLetter"
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PickAQuizCardPreview() {
@@ -70,6 +116,29 @@ fun PickAQuizCardPreview() {
             "Technician",
             "Study for the 2026-2030 question pool",
             {}
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolSuccessCardCorrectPreview() {
+    HamTestTheme {
+        QuestionPoolSuccessCard(
+            true,
+            "C"
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolSuccessCardWrongPreview() {
+    HamTestTheme {
+        QuestionPoolSuccessCard(
+            false,
+            "C"
         )
     }
 }
