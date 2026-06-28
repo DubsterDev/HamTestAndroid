@@ -14,7 +14,7 @@ import kotlin.math.floor
 class PracticeTestViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _placeholderQuestion = PracticeTestQuestion(
-        selectedAnswer = 0,
+        selectedAnswer = -1,
         hamQuestion = HamQuestion(
             id = "BOB",
             correct = 0,
