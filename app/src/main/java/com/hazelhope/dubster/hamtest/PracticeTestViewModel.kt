@@ -80,7 +80,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
             _generatedQuiz.add(
                 PracticeTestQuestion(
                     hamQuestion = randomizedQuestion,
-                    selectedAnswer = 0
+                    selectedAnswer = -1
                 )
             )
         }
