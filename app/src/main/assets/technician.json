@@ -25,7 +25,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "C"
+    "correct_letter": "C",
+    "explanation":  "The Federal Communications Commission, commonly known as the FCC, was placed in charge of radio and telecommunications by the United States Congress in 1934, when it replaced the Federal Radio Commission."
   },
   {
     "id": "T1A03",
@@ -39,7 +40,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "Phone emissions are typically more difficult to understand, especially when received signal is weak. Using the phonetic alphabet can make it easier to clearly decipher what is being said. Using the phonetic alphabet is most commonly used on the HF bands for identification, but it is also used on VHF and UHF."
   },
   {
     "id": "T1A04",
@@ -156,7 +158,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "Just as it is prohibited to transmit a message that obscures your meaning, it is also prohibited to willfully or maliciously obscure someone else's transmissions. Malicious behavior is never accepted in amateur radio."
   },
   {
     "id": "T1B01",
@@ -184,7 +187,8 @@
       "Any amateurs with a Technician class or higher license, and NASA approval"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "As long as the frequency is within your licensed privileges, the FCC allows you to contact anyone who is operating within the frequency range permitted by your license class. This includes astronauts, celebrities, and any other licensed amateur radio operator operating within your privileges. Amateur operators on the International Space Station operate within the Technician class VHF privileges."
   },
   {
     "id": "T1B03",
@@ -338,7 +342,8 @@
       "Technician, General, Amateur Extra"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation": "Though there are still people holding Novice, Technician Plus, and Advanced amateur radio licenses, these license classes are no longer issued. The only license classes currently issued are Technician, General, and Amateur Extra."
   },
   {
     "id": "T1C02",
