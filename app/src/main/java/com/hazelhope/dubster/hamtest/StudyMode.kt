@@ -268,7 +268,7 @@ fun QuestionPoolJustQuestion(
         if (currentQuestion.figure != "") {
             Image(
                 painterResource(
-                    figurePathsToIds[currentQuestion.figure] ?: R.drawable.outline_cancel
+                    figurePathsToIds[currentQuestion.figure] ?: R.drawable.emoji_shocked
                 ),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
