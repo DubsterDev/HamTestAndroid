@@ -53,7 +53,8 @@
       "USPS First-Class Mail from the lead volunteer examiner"
     ],
     "figure": "",
-    "correct_letter": "A"
+    "correct_letter": "A",
+    "explanation": "The FCC will send you an email after granting your license. This is not immediate, however, sometimes it can take until the next day to get the email. If you want to know earlier, you'll have to check the ULS frequently to see if you showed up yet."
   },
   {
     "id": "T1A05",
@@ -67,7 +68,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "C"
+    "correct_letter": "C",
+    "explanation": "The ULS is an online, searchable database, where the FCC stores license grants. Your license will likely show up in the ULS a few hours before you get an email about it, and as soon as it does, you can start talking on the radio with your new call sign."
   },
   {
     "id": "T1A06",
@@ -81,7 +83,8 @@
       "On ten meters, between 28.200 MHz and 28.300 MHz"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation": "The FCC has rules about where automatically controlled beacons can transmit, on 10 meters, that is 28.200 MHz to 28.300 MHz. There are other frequency ranges as well for different HF bands. You kind of just have to memorize this question."
   },
   {
     "id": "T1A07",
@@ -109,7 +112,8 @@
       "The International Telecommunication Union"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "A volunteer frequency coordinator is an individual appointed by local amateur radio operators who recommends frequencies, typically for repeaters. These are recommendations, so the frequency recommend by the VFC does not have to be used, though it is good amateur practice to do so."
   },
   {
     "id": "T1A09",
@@ -123,7 +127,8 @@
       "The FCC Regional Field Office"
     ],
     "figure": "",
-    "correct_letter": "C"
+    "correct_letter": "C",
+    "explanation": "The FCC doesn't care what frequencies you use, as long as you're following the regulations. However, it is considered good practice to use a frequency recommended by a Volunteer Frequency Coordinator. Since there is no requirement for there to be a VFC, amateur operators in the local area must appoint a VFC."
   },
   {
     "id": "T1A10",
