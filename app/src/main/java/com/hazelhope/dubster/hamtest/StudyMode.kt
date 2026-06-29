@@ -49,6 +49,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 import com.hazelhope.dubster.hamtest.ui.theme.extendedColors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -100,6 +102,15 @@ fun Quiz(
     modifier: Modifier = Modifier,
     viewModel: StudyModeViewModel = viewModel()
 ) {
+    var shouldAutoSelectCorrectAnswer by remember { mutableStateOf(false) }
+
+    LaunchedEffect(db) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val settingsDao = db.settingsDao()
+            shouldAutoSelectCorrectAnswer = settingsDao.getValue("autoSelectCorrectAnswer").getOrNull(0)?.value == "true"
+        }
+    }
+
     LaunchedEffect(db) {
         viewModel.setDatabase(db)
     }
@@ -131,7 +142,7 @@ fun Quiz(
                 modifier = Modifier.fillMaxWidth()
             )
             QuestionPoolDiagnostics(questionPoolData)
-            QuestionPoolQuestion(currentQuestion, {
+            QuestionPoolQuestion(currentQuestion, shouldAutoSelectCorrectAnswer, {
                 viewModel.nextQuestion(it)
             },
                 modifier = Modifier.weight(1f))
@@ -156,10 +167,18 @@ fun QuestionPoolDiagnostics(questionPoolData: QuestionPoolLiveData, modifier: Mo
 }
 
 @Composable
-fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun QuestionPoolQuestion(currentQuestion: HamQuestion, autoSelectCorrectAnswer: Boolean, nextQuestion: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     var checked by remember { mutableStateOf(false) }
 
     var selectedAnswer by remember { mutableIntStateOf(-1) }
+
+    LaunchedEffect(autoSelectCorrectAnswer) {
+        selectedAnswer = if (autoSelectCorrectAnswer && currentQuestion.userQuestionInfo?.firstTime != false) 0 else -1
+    }
+
+    LaunchedEffect(currentQuestion) {
+        selectedAnswer = if (autoSelectCorrectAnswer && currentQuestion.userQuestionInfo?.firstTime != false) 0 else -1
+    }
 
     var revealedIsCheckedCorrect by remember { mutableStateOf(false) }
     var revealedCorrectLetter by remember { mutableStateOf("") }
@@ -193,7 +212,6 @@ fun QuestionPoolQuestion(currentQuestion: HamQuestion, nextQuestion: (Boolean) -
             } else {
                 nextQuestion(!revealedIsCheckedCorrect)
                 checked = false
-                selectedAnswer = -1
             }
         },
             modifier = Modifier
@@ -469,6 +487,7 @@ fun QuestionPoolQuestionPreview() {
                     false
                 )
             ),
+            false,
             nextQuestion = { }
         )
     }
