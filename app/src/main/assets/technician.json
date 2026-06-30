@@ -202,7 +202,8 @@
       "222.15 MHz"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "Technician operators have full privileges on six meters. The six meter band is between 50 and 54 MHz, so the only answer that matches is 52.525 MHz. You will have to memorize this question."
   },
   {
     "id": "T1B04",
@@ -216,7 +217,8 @@
       "2 meters"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation": "The two meter band ranges from 144 MHz to 148 MHz, so 146.52 is in the two meter band. Fun fact: 146.52 is the national two meter calling frequency!"
   },
   {
     "id": "T1B05",
@@ -230,7 +232,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation": "As a Technician class licensee, you are allowed to use digital modes to communicate on 10 meters, 6 meters and 2 meters, though there are some restrictions on where in these bands you can use digital modes. There are also a few other bands that you can operate digital modes on, including 1.25 meters (the amateur service is secondary on this band), 70 centimeters, 33 centimeters, and 23 centimeters."
   },
   {
     "id": "T1B06",
@@ -244,7 +247,8 @@
       "30-meter band only"
     ],
     "figure": "",
-    "correct_letter": "B"
+    "correct_letter": "B",
+    "explanation": "The only HF band Technicians are allowed to use phone emissions on is 10 meters. All other HF bands that Technicians can operate on are limited to CW only for Technician class operators."
   },
   {
     "id": "T1B07",
@@ -258,7 +262,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "A"
+    "correct_letter": "A",
+    "explanation": "The first 100 kHz of six meter and two meter bands are restricted to CW only, so if you want to communicate on these bands, you'll going to have to learn Morse code! There are many online resources for learning Morse code, such as lcwo.net"
   },
   {
     "id": "T1B08",
@@ -272,7 +277,8 @@
       "Digital transmissions are not permitted in those segments"
     ],
     "figure": "",
-    "correct_letter": "A"
+    "correct_letter": "A",
+    "explanation": "When the Amateur Radio Service is designated as a secondary user, amateur operators must not interfere with the primary operator's transmissions."
   },
   {
     "id": "T1B09",
@@ -286,7 +292,8 @@
       "All these choices are correct"
     ],
     "figure": "",
-    "correct_letter": "D"
+    "correct_letter": "D",
+    "explanation": "If you set the transmit frequency of your transmitter to the exact edge of an amateur band, you may risk calibration errors in the frequency display, modulation sidebands extending beyond the band edge, or the transmitter could simply not transmit on the exact frequency set. This could cause you to inadvertently transmit on frequencies you are not authorized to transmit on, which is not allowed."
   },
   {
     "id": "T1B10",
