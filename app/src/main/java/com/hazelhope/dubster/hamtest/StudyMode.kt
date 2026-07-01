@@ -65,13 +65,6 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
             .verticalScroll(scrollState)
     ) {
         PickAQuizCard(
-            title = "Technician (removed in 2026)",
-            description = "Only contains the 28 questions removed in 2026",
-            onClick = {
-                goToQuiz("removedtech2022")
-            }
-        )
-        PickAQuizCard(
             title = "Technician Questions",
             description = "Study for the 2026-2030 question pool",
             onClick = {

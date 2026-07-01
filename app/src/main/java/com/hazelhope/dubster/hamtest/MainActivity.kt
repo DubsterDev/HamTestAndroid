@@ -140,7 +140,6 @@ fun TopBar(topLevel: List<String>, navController: NavController, modifier: Modif
         "settings" to "Settings"
     )
     val studyTitles = mapOf(
-        "removedtech2022" to "Technician Quiz (removed in 2026)",
         "technician" to "Technician Quiz",
         "general" to "General Quiz",
         "extra" to "Extra Quiz"
