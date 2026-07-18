@@ -138,7 +138,7 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
             if (question.selectedAnswer == question.hamQuestion.correct) correctQuestions++
         }
 
-        val score = ((correctQuestions * 1f) / (_generatedQuiz.size - 1)) * 100f
+        val score = ((correctQuestions * 1f) / (_generatedQuiz.size)) * 100f
 
         Log.d("TAG", "finishAndGrade: User got $score")
 
