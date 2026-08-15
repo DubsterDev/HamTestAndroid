@@ -1,5 +1,11 @@
 package com.hazelhope.dubster.hamtest
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +28,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,10 +55,44 @@ fun Settings(
         )
     }
 
+    var isDailyNotificationsEnabled by remember {
+        mutableStateOf(
+            false
+        )
+    }
+
+    val context = LocalContext.current
+    var hasNotificationPermission by remember {
+        mutableStateOf(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
+            }
+        )
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        hasNotificationPermission = granted
+        if (!granted) {
+            isDailyNotificationsEnabled = false
+            Toast.makeText(context, "Disabling daily notifications since permission was not granted", Toast.LENGTH_LONG).show()
+            CoroutineScope(Dispatchers.IO).launch {
+                settingsDao?.upsertSetting(SettingsItem("dailyNotifications", false.toString()))
+            }
+        }
+    }
+
     LaunchedEffect(settingsDao) {
         CoroutineScope(Dispatchers.IO).launch {
             isAutoSelectCorrectAnswerEnabled = settingsDao?.getValue("autoSelectCorrectAnswer")?.getOrNull(0)?.value == "true"
             isBreakTheFlowEnabled = settingsDao?.getValue("breakTheFlow")?.getOrNull(0)?.value == "true"
+            isDailyNotificationsEnabled = settingsDao?.getValue("dailyNotifications")?.getOrNull(0)?.value == "true"
         }
     }
 
@@ -93,6 +135,27 @@ fun Settings(
                 }
             }
         )
+        Text(
+            text = "Reminders",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.padding(6.dp)
+        )
+        SettingsCard(
+            title = "Daily notifications",
+            description = "Sends a notification every day reminding you to study for your Ham Test",
+            position = "only_card",
+            isEnabled = isDailyNotificationsEnabled,
+            onToggle = {
+                isDailyNotificationsEnabled = it
+                CoroutineScope(Dispatchers.IO).launch {
+                    settingsDao?.upsertSetting(SettingsItem("dailyNotifications", it.toString()))
+                }
+                if (isDailyNotificationsEnabled && !hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        )
     }
 }
 
@@ -118,7 +181,8 @@ fun SettingsCard(
             bottomStart = 12.dp,
             bottomEnd = 12.dp
         )
-        else -> RoundedCornerShape(12.dp)
+        "only_card" -> RoundedCornerShape(12.dp)
+        else -> RoundedCornerShape(0.dp)
     }
 
     Card(
