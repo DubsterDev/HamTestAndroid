@@ -1,0 +1,1 @@
+In this release, we added Daily notifications, reminding you to study every day. You can enable this option in Settings.

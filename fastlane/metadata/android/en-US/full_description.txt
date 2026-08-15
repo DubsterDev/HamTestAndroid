@@ -1,0 +1,11 @@
+Prepare for your US Amateur Radio license exam with Ham Test. This app includes the question pools for Technician, General, and Extra, so you can study for all three exams with one app!
+
+<b>Features:</b>
+
+<b>Study Mode</b> helps you memorize the questions and correct answers for <i>all</i> the questions in any of the pools, repeating questions as necessary so you remember as much as possible.
+
+<b>Practice Mode</b> assesses how well you are doing on the actual test. It generates an exam the same way as official tests are created, making it easy to tell if you are ready to take the test yet.
+
+<b>In settings,</b> you can enable a few other features, such as <i>Auto select correct answers</i>, which makes it so the answer is always the first option if you haven't seen the question before.
+
+<i>Break the flow</i> interrupts you every fifteen minutes in case you can't stop on your own, and <i>Daily notifications</i> sends you a reminder every day to keep studying.
