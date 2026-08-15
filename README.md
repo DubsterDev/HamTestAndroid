@@ -12,7 +12,4 @@ There is also a web version at https://hamtest.web.app ([Also on GitHub](https:/
 
 ## Screenshots
 
-<img src="screenshots/study.png" style="width: 24%;" />
-<img src="screenshots/study_technician.png" style="width: 24%;" />
-<img src="screenshots/practice_technician.png" style="width: 24%;" />
-<img src="screenshots/settings.png" style="width: 24%;" />
+<img src="screenshots/study.png" style="width: 24%;" /><img src="screenshots/study_technician.png" style="width: 24%;" /><img src="screenshots/practice_technician.png" style="width: 24%;" /><img src="screenshots/settings.png" style="width: 24%;" />
