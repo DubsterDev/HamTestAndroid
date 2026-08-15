@@ -28,7 +28,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +55,25 @@ class MainActivity : ComponentActivity() {
         )
             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val isDailyNotificationsEnabled = db.settingsDao().getValue("dailyNotifications").getOrNull(0)?.value == "true"
+            if (isDailyNotificationsEnabled) {
+                WorkManager
+                    .getInstance(applicationContext)
+                    .cancelAllWorkByTag("notifications")
+
+                val notificationWorkRequest: WorkRequest =
+                    PeriodicWorkRequestBuilder<NotificationWorker>(23, TimeUnit.HOURS)
+                        .addTag("notifications")
+                        .setInitialDelay(23, TimeUnit.HOURS)
+                        .build()
+
+                WorkManager
+                    .getInstance(applicationContext)
+                    .enqueue(notificationWorkRequest)
+            }
+        }
 
         enableEdgeToEdge()
         setContent {

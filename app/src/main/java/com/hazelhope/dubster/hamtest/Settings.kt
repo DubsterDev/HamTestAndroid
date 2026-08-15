@@ -33,10 +33,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun Settings(
@@ -85,6 +89,20 @@ fun Settings(
             CoroutineScope(Dispatchers.IO).launch {
                 settingsDao?.upsertSetting(SettingsItem("dailyNotifications", false.toString()))
             }
+        } else {
+            WorkManager
+                .getInstance(context)
+                .cancelAllWorkByTag("notifications")
+
+            val notificationWorkRequest: WorkRequest =
+                PeriodicWorkRequestBuilder<NotificationWorker>(23, TimeUnit.HOURS)
+                    .addTag("notifications")
+                    .setInitialDelay(23, TimeUnit.HOURS)
+                    .build()
+
+            WorkManager
+                .getInstance(context)
+                .enqueue(notificationWorkRequest)
         }
     }
 
