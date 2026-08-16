@@ -17,8 +17,8 @@ android {
         applicationId = "com.hazelhope.dubster.hamtest"
         minSdk = 25
         targetSdk = 37
-        versionCode = 116
-        versionName = "1.1.6"
+        versionCode = 117
+        versionName = "1.1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,6 +41,13 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
     }
 }
 
