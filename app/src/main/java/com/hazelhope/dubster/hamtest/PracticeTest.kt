@@ -271,7 +271,7 @@ fun TestFinished(
                 val buttonRadius = (ButtonDefaults.shape as RoundedCornerShape)
                 Button(
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://hamstudy.org/sessions/WM7X/remote".toUri())
+                        val intent = Intent(Intent.ACTION_VIEW, "https://hamstudy.org/sessions/remote".toUri())
                         context.startActivity(intent)
                     },
                     modifier = Modifier.weight(1f),
