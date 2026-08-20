@@ -64,9 +64,10 @@ class MainActivity : ComponentActivity() {
                     .cancelAllWorkByTag("notifications")
 
                 val notificationWorkRequest: WorkRequest =
-                    PeriodicWorkRequestBuilder<NotificationWorker>(23, TimeUnit.HOURS)
+                    PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
                         .addTag("notifications")
-                        .setInitialDelay(23, TimeUnit.HOURS)
+                        // Run 23 hours and 45 minutes from now
+                        .setInitialDelay(23 * 60 + 45, TimeUnit.MINUTES)
                         .build()
 
                 WorkManager
