@@ -1,0 +1,1 @@
+In this release, we improved Daily notifications so they don't drift an hour earlier every day if you don't open the app.
