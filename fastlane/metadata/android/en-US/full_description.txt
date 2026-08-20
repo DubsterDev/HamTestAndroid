@@ -8,4 +8,6 @@ Prepare for your US Amateur Radio license exam with Ham Test. This app includes 
 
 <b>In settings,</b> you can enable a few other features, such as <i>Auto select correct answers</i>, which makes it so the answer is always the first option if you haven't seen the question before.
 
-<i>Break the flow</i> interrupts you every fifteen minutes in case you can't stop on your own, and <i>Daily notifications</i> sends you a reminder every day to keep studying.
+<b>Break the flow</b> interrupts you every fifteen minutes in case you can't stop on your own.
+
+<b>Daily notifications</b> sends you a reminder if you haven't studied yet every day, 15 minutes before the last time you opened Ham Test.
