@@ -161,7 +161,7 @@ fun Settings(
         )
         SettingsCard(
             title = "Daily notifications",
-            description = "Sends a notification every day reminding you to study for your Ham Test",
+            description = "Sends a notification every day reminding you to study, unless you've already studied",
             position = "only_card",
             isEnabled = isDailyNotificationsEnabled,
             onToggle = {
