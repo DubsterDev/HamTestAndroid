@@ -173,6 +173,12 @@ fun Settings(
                 if (isDailyNotificationsEnabled && !hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
+
+                if (!isDailyNotificationsEnabled) {
+                    WorkManager
+                        .getInstance(context)
+                        .cancelAllWorkByTag("notifications")
+                }
             }
         )
     }
