@@ -1,0 +1,1 @@
+In this release, we improved Daily notifications so they don't keep getting sent after you disable them in the settings screen.
