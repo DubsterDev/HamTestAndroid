@@ -1,6 +1,26 @@
 # Ham Test
 
+<p>
+ <a href="https://github.com/DubsterDev/HamTestAndroid/releases/tag/v1.1.9">
+  <img src="https://img.shields.io/github/v/release/DubsterDev/HamTestAndroid?style=for-the-badge&logo=github">
+ </a>
+ <a href="https://f-droid.org/en/packages/com.hazelhope.dubster.hamtest/">
+  <img src="https://img.shields.io/f-droid/v/com.hazelhope.dubster.hamtest?style=for-the-badge&logo=f-droid">
+ </a>
+</p>
+
 An Android App for preparing for all three US Amateur Radio license exams.
+
+## Download
+
+<p>
+ <a href="https://f-droid.org/en/packages/com.hazelhope.dubster.hamtest/">
+  <img src="https://f-droid.org/badge/get-it-on.png" style="height: 80px;">
+ </a>
+ <a href="https://github.com/DubsterDev/HamTestAndroid/releases/tag/v1.1.9">
+  <img src="https://raw.githubusercontent.com/Kunzisoft/Github-badge/refs/heads/main/get-it-on-github.png" style="height: 80px;">
+ </a>
+</p>
 
 There is also a web version at https://hamtest.web.app ([Also on GitHub](https://github.com/DubsterDev/HamTest))
 
