@@ -200,7 +200,7 @@ fun SettingsSeparator(
         text = label,
         color = MaterialTheme.colorScheme.primary,
         style = MaterialTheme.typography.labelLarge,
-        modifier = modifier.padding(6.dp)
+        modifier = modifier.padding(6.dp, 18.dp, 6.dp, 6.dp)
     )
 }
 
