@@ -124,13 +124,8 @@ fun Settings(
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
-        Text(
-            text = "Study Mode",
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(6.dp)
-        )
-        SettingsCard(
+        SettingsSeparator("Study Mode")
+        BooleanSettingsCard(
             title = "Auto select correct answers",
             description = "Makes the correct answer A on new questions",
             isEnabled = isAutoSelectCorrectAnswerEnabled,
@@ -142,7 +137,7 @@ fun Settings(
                 }
             }
         )
-        SettingsCard(
+        BooleanSettingsCard(
             title = "Break the flow",
             description = "Reminders every fifteen minutes (just in case you should be doing something else)",
             position = "bottom",
@@ -154,13 +149,8 @@ fun Settings(
                 }
             }
         )
-        Text(
-            text = "Reminders",
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(6.dp)
-        )
-        SettingsCard(
+        SettingsSeparator("Reminders")
+        BooleanSettingsCard(
             title = "Daily notifications",
             description = "Sends a notification every day reminding you to study, unless you've already studied",
             position = "only_card",
@@ -185,12 +175,53 @@ fun Settings(
 }
 
 @Composable
-fun SettingsCard(
+fun SettingsSeparator(
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = label,
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.labelLarge,
+        modifier = modifier.padding(6.dp)
+    )
+}
+
+@Composable
+fun BooleanSettingsCard(
     title: String,
     description: String,
     position: String,
     isEnabled: Boolean,
     onToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    SettingsCard(
+        title,
+        description,
+        position,
+        content = {
+            Switch(
+                isEnabled,
+                null,
+                modifier = it
+            )
+        },
+        modifier = modifier
+            .toggleable(
+                value = isEnabled,
+                onValueChange = onToggle,
+                role = Role.Switch
+            )
+    )
+}
+
+@Composable
+fun SettingsCard(
+    title: String,
+    description: String,
+    position: String,
+    content: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val shape = when (position) {
@@ -219,11 +250,6 @@ fun SettingsCard(
             disabledContentColor = MaterialTheme.colorScheme.onBackground,
         ),
         modifier = modifier
-            .toggleable(
-                value = isEnabled,
-                onValueChange = onToggle,
-                role = Role.Switch
-            )
             .fillMaxWidth()
     ) {
         Row(
@@ -245,11 +271,7 @@ fun SettingsCard(
                     text = description
                 )
             }
-            Switch(
-                isEnabled,
-                null,
-                modifier = Modifier.weight(0.2f)
-            )
+            content(modifier.weight(0.2f))
         }
     }
 }
