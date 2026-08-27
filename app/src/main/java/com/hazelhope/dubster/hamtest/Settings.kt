@@ -181,12 +181,18 @@ fun Settings(
         IconSettingsCard(
             title = "Open source",
             description = "Ham Test is open source on GitHub under the GPLv3 license",
-            position = "only_card",
+            position = "top",
             icon = R.drawable.outline_open_in_new,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW, "https://github.com/DubsterDev/HamTestAndroid".toUri())
                 context.startActivity(intent)
             }
+        )
+        SettingsCard(
+            title = "Version",
+            description = BuildConfig.VERSION_NAME,
+            position = "bottom",
+            content = {}
         )
     }
 }
