@@ -1,9 +1,11 @@
 package com.hazelhope.dubster.hamtest
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -35,9 +37,24 @@ import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
+    private var exportJson: String = ""
+    private val createFileLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.data?.let { uri ->
+                contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    outputStream.write(exportJson.toByteArray())
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -79,9 +96,63 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HamTestTheme {
-                App(db, navigateTo = navigateTo)
+                App(db, { exportData(db) }, navigateTo = navigateTo)
             }
         }
+    }
+
+    fun exportData(
+        db: HamTestDatabase
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val userQuestionDao = db.userQuestionDao()
+            val settingsDao = db.settingsDao()
+            val databaseVersion = db.openHelper.readableDatabase.version
+            val technicianData = userQuestionDao.getAll("technician").associate {
+                it.id to ExportQuestionPoolData(
+                    score = it.score,
+                    lastSeenAt = it.lastSeenAt,
+                    firstTime = it.firstTime
+                )
+            }
+            val generalData = userQuestionDao.getAll("general").associate {
+                it.id to ExportQuestionPoolData(
+                    score = it.score,
+                    lastSeenAt = it.lastSeenAt,
+                    firstTime = it.firstTime
+                )
+            }
+            val extraData = userQuestionDao.getAll("extra").associate {
+                it.id to ExportQuestionPoolData(
+                    score = it.score,
+                    lastSeenAt = it.lastSeenAt,
+                    firstTime = it.firstTime
+                )
+            }
+            val settings = settingsDao.getAll().associate {
+                // All settings are booleans right now
+                it.id to JsonPrimitive(it.value.toBoolean())
+            }
+
+            val exportData = ExportData(
+                dbVersion = databaseVersion,
+                settings = settings,
+                technician = technicianData,
+                general = generalData,
+                extra = extraData
+            )
+
+            exportJson = Json.encodeToString(exportData)
+
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/octet-stream"
+                putExtra(Intent.EXTRA_TITLE, "progress.hamtest")
+            }
+
+            createFileLauncher.launch(intent)
+        }
+
     }
 }
 
@@ -89,6 +160,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App(
     db: HamTestDatabase,
+    exportData: () -> Unit,
     modifier: Modifier = Modifier,
     navigateTo: String? = null
 ) {
@@ -148,7 +220,11 @@ fun App(
                 PracticeTest(quizType, db, modifier = newModifier)
             }
             composable("settings") {
-                Settings(modifier = newModifier, settingsDao = settingsDao)
+                Settings(
+                    modifier = newModifier,
+                    settingsDao = settingsDao,
+                    exportData = exportData
+                )
             }
         }
     }

@@ -50,6 +50,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun Settings(
+    exportData: () -> Unit,
     modifier: Modifier = Modifier,
     settingsDao: SettingsDao? = null
 ) {
@@ -175,6 +176,25 @@ fun Settings(
                         .getInstance(context)
                         .cancelAllWorkByTag("notifications")
                 }
+            }
+        )
+        SettingsSeparator("Data management")
+        IconSettingsCard(
+            title = "Export progress",
+            description = "Export your progress to a file",
+            position = "top",
+            icon = R.drawable.outline_download,
+            onClick = {
+                exportData()
+            }
+        )
+        IconSettingsCard(
+            title = "Import progress",
+            description = "Import your progress from a file",
+            position = "bottom",
+            icon = R.drawable.outline_upload,
+            onClick = {
+
             }
         )
         SettingsSeparator("About Ham Test")
@@ -329,6 +349,6 @@ fun SettingsCard(
 @Composable
 fun SettingsPreview() {
     HamTestTheme {
-        Settings()
+        Settings({})
     }
 }

@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class HamQuestion(
@@ -56,4 +57,21 @@ data class UserQuestionInfo(
 data class SettingsItem(
     @PrimaryKey val id: String,
     val value: String,
+)
+
+// Import/export
+@Serializable
+data class ExportData(
+    val dbVersion: Int,
+    val settings: Map<String, JsonElement>,
+    val technician: Map<String, ExportQuestionPoolData>,
+    val general: Map<String, ExportQuestionPoolData>,
+    val extra: Map<String, ExportQuestionPoolData>
+)
+
+@Serializable
+data class ExportQuestionPoolData(
+    val score: Int,
+    val firstTime: Boolean,
+    val lastSeenAt: Int
 )
