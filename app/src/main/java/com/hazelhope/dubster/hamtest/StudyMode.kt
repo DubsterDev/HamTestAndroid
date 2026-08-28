@@ -153,7 +153,8 @@ fun QuestionPoolDiagnostics(questionPoolData: QuestionPoolLiveData, modifier: Mo
         Text(
             text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}\n" +
                     "Weak Questions: ${questionPoolData.weakQuestions}\n" +
-                    "Current Question Score: ${questionPoolData.currentQuestionScore}",
+                    "Current Question Score: ${questionPoolData.currentQuestionScore}\n" +
+                    "Current Question Last Seen At: ${questionPoolData.currentQuestionLastSeenAt}",
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -496,6 +497,7 @@ fun QuestionPoolDiagnosticsPreview() {
                 400,
                 35,
                 2,
+                0,
                 0
             )
         )

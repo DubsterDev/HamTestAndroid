@@ -37,7 +37,8 @@ data class QuestionPoolLiveData(
     val totalPoolSize: Int,
     val inUsePoolSize: Int,
     val weakQuestions: Int,
-    val currentQuestionScore: Int
+    val currentQuestionScore: Int,
+    val currentQuestionLastSeenAt: Int
 )
 
 @Entity(tableName = "question_info", primaryKeys = ["id", "pool"])

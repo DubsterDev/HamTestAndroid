@@ -41,7 +41,8 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
         totalPoolSize = 1,
         inUsePoolSize = 1,
         weakQuestions = 1,
-        currentQuestionScore = 0
+        currentQuestionScore = 0,
+        currentQuestionLastSeenAt = 0
     ))
     val questionPoolData: StateFlow<QuestionPoolLiveData> = _questionPoolData.asStateFlow()
 
@@ -69,7 +70,8 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                     totalPoolSize = _quiz.size,
                     inUsePoolSize = 0,
                     weakQuestions = 0,
-                    currentQuestionScore = 0
+                    currentQuestionScore = 0,
+                    currentQuestionLastSeenAt = 0
                 )
             }
             nextQuestion(false, specialFirstQuestion = true)
@@ -170,7 +172,8 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                 oldData.copy(
                     inUsePoolSize = allQuestions.size,
                     weakQuestions = scoresLessThanZero.size,
-                    currentQuestionScore = randomQuestion.userQuestionInfo?.score ?: -2
+                    currentQuestionScore = randomQuestion.userQuestionInfo?.score ?: -2,
+                    currentQuestionLastSeenAt = randomQuestion.userQuestionInfo?.lastSeenAt ?: 0
                 )
             }
 
