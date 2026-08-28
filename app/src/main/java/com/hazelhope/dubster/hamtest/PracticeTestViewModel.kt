@@ -4,14 +4,18 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlin.math.floor
 
 class PracticeTestViewModel(application: Application) : AndroidViewModel(application) {
+    private var _db: HamTestDatabase? = null
 
     private val _placeholderQuestion = PracticeTestQuestion(
         selectedAnswer = -1,
@@ -61,6 +65,10 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
 
             generateQuiz()
         }
+    }
+
+    fun setDatabase(db: HamTestDatabase) {
+        _db = db
     }
 
     fun generateQuiz() {
@@ -136,6 +144,22 @@ class PracticeTestViewModel(application: Application) : AndroidViewModel(applica
 
         _generatedQuiz.forEach { question ->
             if (question.selectedAnswer == question.hamQuestion.correct) correctQuestions++
+            else {
+                CoroutineScope(Dispatchers.IO).launch {
+                    // Set the score to -2 so the user sees it when going back to Study Mode
+                    val dao = _db?.userQuestionDao()
+
+                    if (dao != null) {
+                        val userQuestion = dao.loadAllByIds(listOf(question.hamQuestion.id))
+
+                        if (userQuestion.isNotEmpty()) {
+                            dao.updateScoreWithoutPoolSize(question.hamQuestion.id, -2)
+                        }
+                    } else {
+                        Log.d("TAG", "finishAndGrade: DB is missing")
+                    }
+                }
+            }
         }
 
         val score = ((correctQuestions * 1f) / (_generatedQuiz.size)) * 100f

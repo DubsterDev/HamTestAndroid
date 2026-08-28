@@ -19,6 +19,9 @@ interface UserQuestionDao {
     @Query("UPDATE question_info SET score = :score, firstTime = 0, lastSeenAt = :poolSize WHERE id = :id")
     fun updateScore(id: String, score: Int, poolSize: Int)
 
+    @Query("UPDATE question_info SET score = :score, firstTime = 0 WHERE id = :id")
+    fun updateScoreWithoutPoolSize(id: String, score: Int)
+
     @Insert
     fun insertAll(vararg questionInfo: UserQuestionInfo)
 

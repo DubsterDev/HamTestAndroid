@@ -85,9 +85,14 @@ fun Practice(
 @Composable
 fun PracticeTest(
     quizType: String,
+    db: HamTestDatabase,
     modifier: Modifier = Modifier,
     viewModel: PracticeTestViewModel = viewModel()
 ) {
+    LaunchedEffect(db) {
+        viewModel.setDatabase(db)
+    }
+
     LaunchedEffect(quizType) {
         viewModel.loadQuiz(quizType)
     }

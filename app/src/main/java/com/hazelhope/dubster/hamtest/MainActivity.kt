@@ -145,7 +145,7 @@ fun App(
             }
             composable("practice/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
                 val quizType = it.arguments?.getString("class") ?: "unknown"
-                PracticeTest(quizType, modifier = newModifier)
+                PracticeTest(quizType, db, modifier = newModifier)
             }
             composable("settings") {
                 Settings(modifier = newModifier, settingsDao = settingsDao)
