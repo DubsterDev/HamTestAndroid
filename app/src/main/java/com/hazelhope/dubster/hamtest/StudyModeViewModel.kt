@@ -175,7 +175,7 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                         allHamQuestions
                     }.sortedBy {
                         it.userQuestionInfo?.lastSeenAt ?: 0
-                    }.slice(0..20)
+                    }.take(20)
 
                     randomQuestion = questionsToPullFrom.random()
                 }
