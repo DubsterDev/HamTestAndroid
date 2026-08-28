@@ -1,7 +1,7 @@
 # Ham Test
 
 <p>
- <a href="https://github.com/DubsterDev/HamTestAndroid/releases/tag/v1.1.9">
+ <a href="https://github.com/DubsterDev/HamTestAndroid/releases">
   <img src="https://img.shields.io/github/v/release/DubsterDev/HamTestAndroid?style=for-the-badge&logo=github">
  </a>
  <a href="https://f-droid.org/en/packages/com.hazelhope.dubster.hamtest/">
@@ -17,7 +17,7 @@ An Android App for preparing for all three US Amateur Radio license exams.
  <a href="https://f-droid.org/en/packages/com.hazelhope.dubster.hamtest/">
   <img src="https://f-droid.org/badge/get-it-on.png" style="height: 80px;">
  </a>
- <a href="https://github.com/DubsterDev/HamTestAndroid/releases/tag/v1.1.9">
+ <a href="https://github.com/DubsterDev/HamTestAndroid/releases">
   <img src="https://raw.githubusercontent.com/Kunzisoft/Github-badge/refs/heads/main/get-it-on-github.png" style="height: 80px;">
  </a>
 </p>
@@ -33,3 +33,15 @@ There is also a web version at https://hamtest.web.app ([Also on GitHub](https:/
 ## Screenshots
 
 <img src="screenshots/study.png" style="width: 24%;" /><img src="screenshots/study_technician.png" style="width: 24%;" /><img src="screenshots/practice_technician.png" style="width: 24%;" /><img src="screenshots/settings.png" style="width: 24%;" />
+
+## Explanations
+
+I'm trying to get explanations for all of the questions in all three of the pools. If you're interested in helping out, check out [the question pools repo](https://github.com/DubsterDev/HamTestQuestionPools).
+
+## Included question pool effective dates
+
+The **Technician** question pool is valid through **2026-2030**.
+
+The **General** question pool is valid through **2023-2027**.
+
+The **Amateur Extra** question pool is valid through **2024-2028**.
