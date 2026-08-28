@@ -157,14 +157,27 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
             var randomQuestion = allHamQuestions[0]
 
             if (shouldUseRandomQuestion) {
+                val shouldUseRandomOldQuestion = Random.nextDouble() >= .6
+
                 val onlyCorrectHamQuestions = allHamQuestions.filter {
                     (it.userQuestionInfo?.score ?: -10) >= 0
                 }
 
-                randomQuestion = if (onlyCorrectHamQuestions.isNotEmpty()) {
-                    onlyCorrectHamQuestions.random()
+                if (shouldUseRandomOldQuestion) {
+                    randomQuestion = if (onlyCorrectHamQuestions.isNotEmpty()) {
+                        onlyCorrectHamQuestions.random()
+                    } else {
+                        allHamQuestions.random()
+                    }
                 } else {
-                    allHamQuestions.random()
+                    // Sort by last seen ascending
+                    val questionsToPullFrom = onlyCorrectHamQuestions.ifEmpty {
+                        allHamQuestions
+                    }.sortedBy {
+                        it.userQuestionInfo?.lastSeenAt ?: 0
+                    }.slice(0..20)
+
+                    randomQuestion = questionsToPullFrom.random()
                 }
             }
 
