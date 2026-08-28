@@ -46,6 +46,7 @@ data class UserQuestionInfo(
     val id: String,
     val pool: String,
     val score: Int,
+    val lastSeenAt: Int,
     val firstTime: Boolean = false
 )
 

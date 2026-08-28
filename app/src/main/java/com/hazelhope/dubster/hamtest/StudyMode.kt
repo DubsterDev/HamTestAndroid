@@ -474,10 +474,11 @@ fun QuestionPoolQuestionPreview() {
                 "C",
                 explanation = "FCC rules explicitly state the software used by hams must never look cool. If a ham uses such software, their license may be immediately and permanently revoked or suspended.",
                 userQuestionInfo = UserQuestionInfo(
-                    "PREVIEW",
-                    "preview",
-                    -2,
-                    false
+                    id = "PREVIEW",
+                    pool = "preview",
+                    score = -2,
+                    lastSeenAt = 0,
+                    firstTime = false
                 )
             ),
             false,

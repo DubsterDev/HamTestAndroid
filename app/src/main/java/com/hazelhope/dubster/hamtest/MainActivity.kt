@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
             HamTestDatabase::class.java,
             "ham-test-db"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
             .build()
 
         CoroutineScope(Dispatchers.IO).launch {

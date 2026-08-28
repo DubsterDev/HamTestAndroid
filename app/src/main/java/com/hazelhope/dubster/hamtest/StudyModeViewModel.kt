@@ -88,6 +88,8 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
             val shouldAutoSelectCorrectAnswer = settingsDao.getValue("autoSelectCorrectAnswer").getOrNull(0)?.value == "true"
             val breakTheFlowEnabled = settingsDao.getValue("breakTheFlow").getOrNull(0)?.value == "true"
 
+            val allQuestions = dao.getAll(quizType).toMutableList()
+
             if (!specialFirstQuestion) {
                 val oldUserQuestion = dao.loadAllByIds(listOf(_currentQuestion.value.id))
                 var score = if (shouldAutoSelectCorrectAnswer) -3 else -2
@@ -100,17 +102,18 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                 else score++
 
                 if (didExist) {
-                    dao.updateScore(_currentQuestion.value.id, score)
+                    dao.updateScore(_currentQuestion.value.id, score, allQuestions.size)
                 } else {
-                    dao.insertAll(UserQuestionInfo(
+                    val question = UserQuestionInfo(
                         id = _currentQuestion.value.id,
                         pool = quizType,
-                        score = score
-                    ))
+                        score = score,
+                        lastSeenAt = allQuestions.size
+                    )
+                    dao.insertAll(question)
+                    allQuestions += question
                 }
             }
-
-            var allQuestions = dao.getAll(quizType)
 
             var scoresLessThanZero = dao.getAmountOfScoresLessThanZero(quizType)
 
@@ -126,12 +129,13 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                         id = newQuestion.id,
                         pool = quizType,
                         score = if (shouldAutoSelectCorrectAnswer) -3 else -2,
-                        firstTime = true
+                        firstTime = true,
+                        lastSeenAt = allQuestions.size
                     )
 
                     dao.insertAll(newQuestionInfo)
 
-                    allQuestions = listOf(newQuestionInfo) + allQuestions
+                    allQuestions += newQuestionInfo
                     scoresLessThanZero = listOf(newQuestionInfo) + scoresLessThanZero
                 }
             }
