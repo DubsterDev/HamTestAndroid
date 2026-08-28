@@ -30,10 +30,6 @@ There is also a web version at https://hamtest.web.app ([Also on GitHub](https:/
  - Optional daily reminders to practice
  - Optional reminder every fifteen minutes to take a break
 
-## Screenshots
-
-<img src="screenshots/study.png" style="width: 24%;" /><img src="screenshots/study_technician.png" style="width: 24%;" /><img src="screenshots/practice_technician.png" style="width: 24%;" /><img src="screenshots/settings.png" style="width: 24%;" />
-
 ## Explanations
 
 I'm trying to get explanations for all of the questions in all three of the pools. If you're interested in helping out, check out [the question pools repo](https://github.com/DubsterDev/HamTestQuestionPools).
@@ -45,3 +41,7 @@ The **Technician** question pool is valid through **2026-2030**.
 The **General** question pool is valid through **2023-2027**.
 
 The **Amateur Extra** question pool is valid through **2024-2028**.
+
+## Screenshots
+
+<img src="screenshots/study.png" style="width: 24%;" /><img src="screenshots/study_technician.png" style="width: 24%;" /><img src="screenshots/practice_technician.png" style="width: 24%;" /><img src="screenshots/settings.png" style="width: 24%;" />
