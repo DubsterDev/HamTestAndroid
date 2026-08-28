@@ -105,6 +105,16 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
 
                 if (didExist) {
                     dao.updateScore(_currentQuestion.value.id, score, allQuestions.size)
+
+                    val index = allQuestions.indexOfFirst { it.id == _currentQuestion.value.id }
+                    if (index >= 0) {
+                        allQuestions[index] = allQuestions[index].copy(
+                            score = score,
+                            lastSeenAt = allQuestions.size,
+                            firstTime = false
+                        )
+                    }
+
                 } else {
                     val question = UserQuestionInfo(
                         id = _currentQuestion.value.id,
