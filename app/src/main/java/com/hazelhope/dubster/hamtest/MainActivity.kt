@@ -1,7 +1,9 @@
 package com.hazelhope.dubster.hamtest
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,9 +41,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
+    private lateinit var db: HamTestDatabase
     private var exportJson: String = ""
     private val createFileLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -55,6 +59,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val openFileLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            uri ?: return@registerForActivityResult
+
+            try {
+                val contents = contentResolver.openInputStream(uri)
+                    ?.bufferedReader()
+                    ?.use { it.readText() }
+                if (contents != null) {
+                    finishImportData(contents)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,7 +86,7 @@ class MainActivity : ComponentActivity() {
             else -> null
         }
 
-        val db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
             application,
             HamTestDatabase::class.java,
             "ham-test-db"
@@ -96,14 +117,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HamTestTheme {
-                App(db, { exportData(db) }, navigateTo = navigateTo)
+                App(db, { exportData() }, { importDataOpenFile() }, navigateTo = navigateTo)
             }
         }
     }
 
-    fun exportData(
-        db: HamTestDatabase
-    ) {
+    fun exportData() {
         CoroutineScope(Dispatchers.IO).launch {
             val userQuestionDao = db.userQuestionDao()
             val settingsDao = db.settingsDao()
@@ -154,6 +173,64 @@ class MainActivity : ComponentActivity() {
         }
 
     }
+
+    fun importDataOpenFile() {
+        openFileLauncher.launch(arrayOf("*/*"))
+    }
+
+    fun finishImportData(content: String) {
+        val exportData = Json.decodeFromString<ExportData>(content)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val userQuestionDao = db.userQuestionDao()
+            val settingsDao = db.settingsDao()
+            val databaseVersion = db.openHelper.readableDatabase.version
+
+            if (exportData.dbVersion > databaseVersion) {
+                Toast.makeText(applicationContext, "Failed to import, file is from a newer version of Ham Test", Toast.LENGTH_LONG).show()
+            } else {
+                exportData.settings.forEach { (key, value) ->
+                    val setting = SettingsItem(
+                        key,
+                        value.toString()
+                    )
+                    settingsDao.upsertSetting(setting)
+                }
+
+                exportData.technician.forEach { (id, data) ->
+                    val questionInfo = UserQuestionInfo(
+                        id = id,
+                        pool = "technician",
+                        score = data.score,
+                        lastSeenAt = data.lastSeenAt,
+                        firstTime = data.firstTime
+                    )
+                    userQuestionDao.upsertQuestion(questionInfo)
+                }
+
+                exportData.general.forEach { (id, data) ->
+                    val questionInfo = UserQuestionInfo(
+                        id = id,
+                        pool = "general",
+                        score = data.score,
+                        lastSeenAt = data.lastSeenAt,
+                        firstTime = data.firstTime
+                    )
+                    userQuestionDao.upsertQuestion(questionInfo)
+                }
+                exportData.extra.forEach { (id, data) ->
+                    val questionInfo = UserQuestionInfo(
+                        id = id,
+                        pool = "extra",
+                        score = data.score,
+                        lastSeenAt = data.lastSeenAt,
+                        firstTime = data.firstTime
+                    )
+                    userQuestionDao.upsertQuestion(questionInfo)
+                }
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,6 +238,7 @@ class MainActivity : ComponentActivity() {
 fun App(
     db: HamTestDatabase,
     exportData: () -> Unit,
+    importData: () -> Unit,
     modifier: Modifier = Modifier,
     navigateTo: String? = null
 ) {
@@ -223,7 +301,8 @@ fun App(
                 Settings(
                     modifier = newModifier,
                     settingsDao = settingsDao,
-                    exportData = exportData
+                    exportData = exportData,
+                    importData = importData
                 )
             }
         }

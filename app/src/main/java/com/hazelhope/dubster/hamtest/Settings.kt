@@ -18,12 +18,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,9 +51,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(
     exportData: () -> Unit,
+    importData: () -> Unit,
     modifier: Modifier = Modifier,
     settingsDao: SettingsDao? = null
 ) {
@@ -124,6 +129,48 @@ fun Settings(
 
     val scrollState = rememberScrollState()
 
+    var isImportConfirmationDialogOpen by remember { mutableStateOf(false) }
+
+    if (isImportConfirmationDialogOpen) {
+        AlertDialog(
+            icon = {
+                Icon(
+                    painterResource(R.drawable.outline_upload),
+                    contentDescription = null)
+            },
+            title = {
+                Text(
+                    text = "Are you sure?"
+                )
+            },
+            text = {
+                Text(
+                    text = "Importing progress from a file will overwrite all of your progress on this device with the progress included in the file. Settings will also be modified to match the settings in the file."
+                )
+            },
+            onDismissRequest = { isImportConfirmationDialogOpen = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        isImportConfirmationDialogOpen = false
+                        importData()
+                    }
+                ) {
+                    Text("Proceed")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        isImportConfirmationDialogOpen = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -194,7 +241,7 @@ fun Settings(
             position = "bottom",
             icon = R.drawable.outline_upload,
             onClick = {
-
+                isImportConfirmationDialogOpen = true
             }
         )
         SettingsSeparator("About Ham Test")
@@ -349,6 +396,6 @@ fun SettingsCard(
 @Composable
 fun SettingsPreview() {
     HamTestTheme {
-        Settings({})
+        Settings({}, {})
     }
 }

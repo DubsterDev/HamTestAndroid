@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Upsert
 
 @Dao
 interface UserQuestionDao {
@@ -24,6 +25,9 @@ interface UserQuestionDao {
 
     @Insert
     fun insertAll(vararg questionInfo: UserQuestionInfo)
+
+    @Upsert
+    fun upsertQuestion(questionInfo: UserQuestionInfo)
 
     @Delete
     fun delete(questionInfo: UserQuestionInfo)
