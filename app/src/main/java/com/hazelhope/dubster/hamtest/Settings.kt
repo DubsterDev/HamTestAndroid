@@ -28,7 +28,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +48,7 @@ import androidx.work.WorkRequest
 import com.hazelhope.dubster.hamtest.ui.theme.HamTestTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -59,23 +60,20 @@ fun Settings(
     modifier: Modifier = Modifier,
     settingsDao: SettingsDao? = null
 ) {
-    var isAutoSelectCorrectAnswerEnabled by remember {
-        mutableStateOf(
-            false
-        )
-    }
+    val isAutoSelectCorrectAnswerEnabledFlow by (
+            settingsDao?.getValueAsFlow("autoSelectCorrectAnswer")
+                ?: flowOf(emptyList())
+            ).collectAsState(initial = emptyList())
 
-    var isBreakTheFlowEnabled by remember {
-        mutableStateOf(
-            false
-        )
-    }
+    val isBreakTheFlowEnabledFlow by (
+            settingsDao?.getValueAsFlow("breakTheFlow")
+                ?: flowOf(emptyList())
+            ).collectAsState(initial = emptyList())
 
-    var isDailyNotificationsEnabled by remember {
-        mutableStateOf(
-            false
-        )
-    }
+    val isDailyNotificationsEnabledFlow by (
+            settingsDao?.getValueAsFlow("dailyNotifications")
+                ?: flowOf(emptyList())
+            ).collectAsState(initial = emptyList())
 
     val context = LocalContext.current
     var hasNotificationPermission by remember {
@@ -96,7 +94,6 @@ fun Settings(
     ) { granted ->
         hasNotificationPermission = granted
         if (!granted) {
-            isDailyNotificationsEnabled = false
             Toast.makeText(context, "Disabling daily notifications since permission was not granted", Toast.LENGTH_LONG).show()
             CoroutineScope(Dispatchers.IO).launch {
                 settingsDao?.upsertSetting(SettingsItem("dailyNotifications", false.toString()))
@@ -116,14 +113,6 @@ fun Settings(
             WorkManager
                 .getInstance(context)
                 .enqueue(notificationWorkRequest)
-        }
-    }
-
-    LaunchedEffect(settingsDao) {
-        CoroutineScope(Dispatchers.IO).launch {
-            isAutoSelectCorrectAnswerEnabled = settingsDao?.getValue("autoSelectCorrectAnswer")?.getOrNull(0)?.value == "true"
-            isBreakTheFlowEnabled = settingsDao?.getValue("breakTheFlow")?.getOrNull(0)?.value == "true"
-            isDailyNotificationsEnabled = settingsDao?.getValue("dailyNotifications")?.getOrNull(0)?.value == "true"
         }
     }
 
@@ -182,10 +171,9 @@ fun Settings(
         BooleanSettingsCard(
             title = "Auto select correct answers",
             description = "Makes the correct answer A on new questions",
-            isEnabled = isAutoSelectCorrectAnswerEnabled,
+            isEnabled = isAutoSelectCorrectAnswerEnabledFlow.firstOrNull()?.value == "true",
             position = "top",
             onToggle = {
-                isAutoSelectCorrectAnswerEnabled = it
                 CoroutineScope(Dispatchers.IO).launch {
                     settingsDao?.upsertSetting(SettingsItem("autoSelectCorrectAnswer", it.toString()))
                 }
@@ -195,9 +183,8 @@ fun Settings(
             title = "Break the flow",
             description = "Reminders every fifteen minutes (just in case you should be doing something else)",
             position = "bottom",
-            isEnabled = isBreakTheFlowEnabled,
+            isEnabled = isBreakTheFlowEnabledFlow.firstOrNull()?.value == "true",
             onToggle = {
-                isBreakTheFlowEnabled = it
                 CoroutineScope(Dispatchers.IO).launch {
                     settingsDao?.upsertSetting(SettingsItem("breakTheFlow", it.toString()))
                 }
@@ -208,17 +195,16 @@ fun Settings(
             title = "Daily notifications",
             description = "Sends a notification every day reminding you to study, unless you've already studied",
             position = "only_card",
-            isEnabled = isDailyNotificationsEnabled,
+            isEnabled = isDailyNotificationsEnabledFlow.firstOrNull()?.value == "true",
             onToggle = {
-                isDailyNotificationsEnabled = it
                 CoroutineScope(Dispatchers.IO).launch {
                     settingsDao?.upsertSetting(SettingsItem("dailyNotifications", it.toString()))
                 }
-                if (isDailyNotificationsEnabled && !hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (it && !hasNotificationPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
 
-                if (!isDailyNotificationsEnabled) {
+                if (!it) {
                     WorkManager
                         .getInstance(context)
                         .cancelAllWorkByTag("notifications")

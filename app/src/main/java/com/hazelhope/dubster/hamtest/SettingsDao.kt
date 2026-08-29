@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SettingsDao {
@@ -13,6 +14,9 @@ interface SettingsDao {
 
     @Query("SELECT * FROM settings WHERE id = :key")
     fun getValue(key: String): List<SettingsItem>
+
+    @Query("SELECT * FROM settings WHERE id = :key")
+    fun getValueAsFlow(key: String): Flow<List<SettingsItem>>
 
     @Query("UPDATE settings SET value = :value WHERE id = :key")
     fun updateSetting(key: String, value: String)
