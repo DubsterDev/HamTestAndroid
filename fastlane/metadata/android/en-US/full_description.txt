@@ -13,3 +13,7 @@ If you pass a practice test, the app will give you links to HamStudy.org to find
 <b>Break the flow</b> interrupts you every fifteen minutes in case you can't stop on your own.
 
 <b>Daily notifications</b> sends you a reminder if you haven't studied yet every day, 15 minutes before the last time you opened Ham Test.
+
+You can also <b>import</b> and <b>export</b> your progress so you can switch between devices.
+
+This app contains the Technician pool for 2026-2030, the General pool for 2023-2027, and the Amateur Extra pool for 2024-2028 so you can study completely offline.
