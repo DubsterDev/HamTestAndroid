@@ -114,7 +114,6 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                             firstTime = false
                         )
                     }
-
                 } else {
                     val question = UserQuestionInfo(
                         id = _currentQuestion.value.id,
@@ -150,6 +149,10 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                     allQuestions += newQuestionInfo
                     scoresLessThanZero = listOf(newQuestionInfo) + scoresLessThanZero
                 }
+            }
+
+            allQuestions.sortBy { a ->
+                a.score
             }
 
             var allHamQuestions = allQuestions.mapNotNull { questionInfo ->
