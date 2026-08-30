@@ -1,0 +1,1 @@
+In this release, we fixed a bug that made it so weak questions were shown immediately after becoming <i>not</i> weak.
