@@ -100,7 +100,7 @@ class StudyModeViewModel(application: Application) : AndroidViewModel(applicatio
                     score = oldUserQuestion[0].score
                     didExist = true
                 }
-                if (wasQuestionWrong) score--
+                if (wasQuestionWrong) score = -2
                 else score++
 
                 if (didExist) {
