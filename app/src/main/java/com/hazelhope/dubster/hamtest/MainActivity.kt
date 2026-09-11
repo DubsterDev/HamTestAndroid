@@ -283,7 +283,9 @@ fun App(
             }
             composable("study/{class}", arguments = listOf(navArgument("class") { type = NavType.StringType })) {
                 val quizType = it.arguments?.getString("class") ?: "unknown"
-                Quiz(quizType, db, modifier = newModifier)
+                Quiz(quizType, db, {
+                    navController.navigate("practice/$quizType")
+                }, modifier = newModifier)
             }
             composable("practice") {
                 Practice(

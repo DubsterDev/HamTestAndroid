@@ -3,6 +3,7 @@ package com.hazelhope.dubster.hamtest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,6 +95,7 @@ fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
 fun Quiz(
     quizType: String,
     db: HamTestDatabase,
+    goToPracticeTest: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: StudyModeViewModel = viewModel()
 ) {
@@ -132,7 +134,15 @@ fun Quiz(
                 viewModel.nextQuestion(false)
             })
         } else {
-            QuestionPoolProgress(questionPoolData)
+            if (questionPoolData.inUsePoolSize == questionPoolData.totalPoolSize) {
+                QuestionPoolProgressComplete(
+                    modifier = Modifier.clickable {
+                        goToPracticeTest()
+                    }
+                )
+            } else {
+                QuestionPoolProgress(questionPoolData)
+            }
             QuestionPoolQuestion(currentQuestion, shouldAutoSelectCorrectAnswer, {
                 viewModel.nextQuestion(it)
             },
@@ -170,6 +180,37 @@ fun QuestionPoolProgress(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+    }
+}
+
+@Composable
+fun QuestionPoolProgressComplete(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = "You've seen all the questions",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Take a practice test",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        Icon(
+            painterResource(R.drawable.outline_arrow_forward),
+            contentDescription = null
+        )
     }
 }
 
@@ -514,6 +555,14 @@ fun QuestionPoolProgressPreview() {
                 0
             )
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuestionPoolProgressCompletePreview() {
+    HamTestTheme {
+        QuestionPoolProgressComplete()
     }
 }
 
