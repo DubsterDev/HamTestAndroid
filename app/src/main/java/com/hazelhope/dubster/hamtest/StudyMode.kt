@@ -17,10 +17,10 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +53,7 @@ import com.hazelhope.dubster.hamtest.ui.theme.extendedColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.floor
 
 @Composable
 fun Study(goToQuiz: (String) -> Unit, modifier: Modifier = Modifier) {
@@ -130,11 +132,7 @@ fun Quiz(
                 viewModel.nextQuestion(false)
             })
         } else {
-            LinearProgressIndicator(
-                progress = { questionPoolData.inUsePoolSize / (questionPoolData.totalPoolSize * 1f) },
-                modifier = Modifier.fillMaxWidth()
-            )
-            QuestionPoolDiagnostics(questionPoolData)
+            QuestionPoolProgress(questionPoolData)
             QuestionPoolQuestion(currentQuestion, shouldAutoSelectCorrectAnswer, {
                 viewModel.nextQuestion(it)
             },
@@ -144,19 +142,34 @@ fun Quiz(
 }
 
 @Composable
-fun QuestionPoolDiagnostics(questionPoolData: QuestionPoolLiveData, modifier: Modifier = Modifier) {
+fun QuestionPoolProgress(
+    questionPoolData: QuestionPoolLiveData,
+    modifier: Modifier = Modifier
+) {
+    val percentage = questionPoolData.inUsePoolSize.toFloat() / questionPoolData.totalPoolSize.toFloat()
     Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
             .fillMaxWidth()
             .padding(12.dp)
     ) {
-        Text(
-            text = "Pool Size: ${questionPoolData.inUsePoolSize}/${questionPoolData.totalPoolSize}\n" +
-                    "Weak Questions: ${questionPoolData.weakQuestions}\n" +
-                    "Current Question Score: ${questionPoolData.currentQuestionScore}\n" +
-                    "Current Question Last Seen At: ${questionPoolData.currentQuestionLastSeenAt}",
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+        CircularProgressIndicator(
+            progress = { percentage }
         )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = "You've seen ${floor(percentage * 100).toInt()}% of the questions",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "${questionPoolData.totalPoolSize - questionPoolData.inUsePoolSize} questions to go",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
     }
 }
 
@@ -490,9 +503,9 @@ fun QuestionPoolQuestionPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun QuestionPoolDiagnosticsPreview() {
+fun QuestionPoolProgressPreview() {
     HamTestTheme {
-        QuestionPoolDiagnostics(
+        QuestionPoolProgress(
             QuestionPoolLiveData(
                 400,
                 35,
