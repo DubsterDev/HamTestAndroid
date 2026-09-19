@@ -1,0 +1,1 @@
+In this release, we made it so you have to see the question again a few times if you got it wrong and made it easier to see how far into the pool you actually are
